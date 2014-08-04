@@ -4,7 +4,6 @@ import be.bendem.bendembot.utils.GistStacks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.bot.util.WebUtil;
 import fr.ribesg.alix.api.enums.Codes;
 import org.apache.commons.lang3.StringUtils;
