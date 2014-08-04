@@ -9,7 +9,7 @@ import be.bendem.bendembot.IrcClient;
 public class JavaCommand extends AbstractJdCommand {
 
     public JavaCommand(IrcClient bot) {
-        super(bot.getCommandManager(), "java", new String[]{"Search the java jds"}, "j");
+        super("java", new String[]{"Search the java jds"}, "j");
     }
 
     @Override

@@ -1,13 +1,16 @@
 package be.bendem.bendembot;
 
-import be.bendem.bendembot.command.BukkitCommand;
-//import be.bendem.bendembot.command.DebugCommand;
-import be.bendem.bendembot.command.JavaCommand;
+import be.bendem.bendembot.command.DataCommand;
+import be.bendem.bendembot.command.FarooCommand;
+import be.bendem.bendembot.command.JoinCommand;
+import be.bendem.bendembot.command.LeaveCommand;
+import be.bendem.bendembot.command.MessageCommand;
+import be.bendem.bendembot.command.NickCommand;
+import be.bendem.bendembot.command.NickServCommand;
 import be.bendem.bendembot.command.QuitCommand;
+import be.bendem.bendembot.command.TwitterCommand;
 import be.bendem.bendembot.custompackets.ActionIrcPacket;
 import be.bendem.bendembot.filters.ChatFilter;
-import be.bendem.bendembot.filters.MessageFilter;
-import be.bendem.bendembot.filters.SpamFilter;
 import be.bendem.bendembot.usermanagement.UserManager;
 import be.bendem.bendembot.utils.Time;
 import fr.ribesg.alix.api.Channel;
@@ -21,7 +24,9 @@ import fr.ribesg.alix.api.message.ModeIrcPacket;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
 import fr.ribesg.alix.api.network.ssl.SSLType;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -44,45 +49,59 @@ public class IrcClient extends Client {
         filters = new HashSet<>();
         userManager = new UserManager(this);
         loadItMyself();
-        for(Server server : getServers()) {
-            server.connect();
-        }
+        getServers().forEach(Server::connect);
     }
 
     @Override
-    protected void load() {}
+    protected boolean load() {
+        // Unused method, it clashes with final declarations because
+        // it's called inside the super constructor
+        return true;
+    }
 
     public void loadItMyself() {
-        Server server = new Server(this, getName(), "irc.esper.net", 6697, SSLType.TRUSTING);
-        server.addChannel("#alixNbendem");
+        Server server = new Server(this, "Esper", getName(), getName(), "irc.esper.net", 6697, null, SSLType.TRUSTING);
+        server.addChannel("#Georges");
         //server.addChannel("#bendemPlugins");
 
         getServers().add(server);
 
-        createCommandManager(")", admins);
-        CommandManager manager = getCommandManager();
+        //AlixConfiguration configuration = new AlixConfiguration("alix.yml");
+
+        CommandManager manager = createCommandManager("`", admins);
         manager.setUnknownCommandMessage(null);
 
-        manager.registerCommand(new BukkitCommand(this));
-        manager.registerCommand(new JavaCommand(this));
-        //manager.registerCommand(new DebugCommand(this));
+        // Control commands
+        manager.registerCommand(new JoinCommand());
+        manager.registerCommand(new LeaveCommand());
         manager.registerCommand(new QuitCommand(this));
-        //
-        //
+        manager.registerCommand(new NickCommand(this));
+
+        // Utility commands
+        manager.registerCommand(new TwitterCommand());
+        manager.registerCommand(new FarooCommand());
+        manager.registerCommand(new NickServCommand());
+
+        // Message commands
+        Map<String, String> data = new HashMap<>();
+        Set<String> specials = new HashSet<>();
+        manager.registerCommand(new DataCommand(data, specials));
+        manager.registerCommand(new MessageCommand(data, specials));
+
+        // JavaDoc commands
+        //manager.registerCommand(new BukkitCommand(this));
+        //manager.registerCommand(new JavaCommand(this));
+
+
         //filters.add(new SpamFilter(this));
         //filters.add(new MessageFilter(this));
     }
 
     @Override
-    public void kill() {
-        // Stop threads here
-        super.kill();
-        Log.info("Exited!");
-    }
-
-    @Override
     public void onServerJoined(final Server server) {
-        server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY espc0waychal@"));
+        if(server.getName().equals("Esper")) {
+            server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY espc0waychal@"));
+        }
     }
 
     @Override
@@ -104,11 +123,7 @@ public class IrcClient extends Client {
             Channel channel = server.getChannel(parameters[0]);
             if(channel != null) {
                 Log.debug("Updating users in " + channel.getName());
-                try {
-                    channel.updateUsers(false);
-                } catch(InterruptedException e) {
-                    Log.error("Update error", e);
-                }
+                channel.updateUsers();
             }
         }
     }
@@ -139,19 +154,6 @@ public class IrcClient extends Client {
         for(ChatFilter filter : filters) {
             filter.forgetUser(source, channel);
         }
-    }
-
-    @Override
-    public void onPrivateMessage(Server server, Source from, String message) {
-        //String[] args = message.split(" ");
-        //if(args.length < 1) {
-        //    throw new IllegalArgumentException();
-        //}
-        //
-        //String command = args[0];
-        //List<String> argList = new ArrayList<>();
-        //Collections.addAll(argList, args);
-        //argList.remove(0);
     }
 
     public boolean speak(Channel channel, String...messages) {
@@ -188,6 +190,25 @@ public class IrcClient extends Client {
 
     public UserManager getUserManager() {
         return userManager;
+    }
+
+    // Let's kill that bot correctly
+    private volatile boolean killed = false;
+
+    @Override
+    public void kill() {
+        if(killed) {
+            return;
+        }
+        killed = true;
+        try {
+            super.kill();
+            Log.info("Exited!");
+        } catch(Throwable t) {
+            Log.error("Could not kill bot", t);
+            killed = false;
+        }
+        System.exit(0);
     }
 
 }

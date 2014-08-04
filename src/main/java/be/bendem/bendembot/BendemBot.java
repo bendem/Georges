@@ -10,7 +10,10 @@ public class BendemBot {
     public static final String APACHE_URL = "http://commons.apache.org/proper/commons-lang/javadocs/api-2.6/";
 
     public static void main(final String args[]) {
-        new IrcClient("Georges");
+        IrcClient georges = new IrcClient("Georges");
+
+        while(!System.console().readLine().equalsIgnoreCase("stop"));
+        georges.kill();
     }
 
 }

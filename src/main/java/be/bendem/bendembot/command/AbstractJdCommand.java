@@ -5,7 +5,6 @@ import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.bot.command.Command;
-import fr.ribesg.alix.api.bot.command.CommandManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,17 +15,18 @@ import java.util.List;
  */
 public abstract class AbstractJdCommand extends Command {
 
-    public AbstractJdCommand(CommandManager manager, String name, String[] usage, String... aliases) {
-        super(manager, name, usage, aliases);
+    public AbstractJdCommand(String name, String[] usage, String... aliases) {
+        super(name, usage, aliases);
     }
 
     public abstract String getUrl();
 
     @Override
-    public void exec(Server server, Channel channel, Source source, String s, String[] args) {
+    public boolean exec(Server server, Channel channel, Source source, String s, String[] args) {
         ArrayList<String> argList = new ArrayList<>();
         Collections.addAll(argList, args);
         search(channel, argList, getUrl());
+        return true;
     }
 
     public void search(Channel channel, List<String> args, String url) {

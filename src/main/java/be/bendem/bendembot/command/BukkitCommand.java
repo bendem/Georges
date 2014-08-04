@@ -11,7 +11,7 @@ public class BukkitCommand extends AbstractJdCommand {
     private final IrcClient bot;
 
     public BukkitCommand(IrcClient bot) {
-        super(bot.getCommandManager(), "bukkit", new String[]{"Search the bukkit jds"}, "b");
+        super("bukkit", new String[]{"Search the bukkit jds"}, "b");
         this.bot = bot;
     }
 

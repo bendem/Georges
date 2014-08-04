@@ -7,6 +7,7 @@ import fr.ribesg.alix.api.callback.Callback;
 import fr.ribesg.alix.api.enums.Command;
 import fr.ribesg.alix.api.message.IrcPacket;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
+import fr.ribesg.alix.internal.network.ReceivedPacketEvent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.regex.Matcher;
@@ -20,7 +21,7 @@ public class NickServ {
     private static final Pattern ACC_PARSER = Pattern.compile("^(?<nick>[^\\s]*)\\s+->\\s+(?<account>[^\\s]*)\\s+ACC\\s+(?<code>[0-3])(\\s+\\((?<precision>[^\\)]+)\\))?$");
 
     public static Response check(Server server, String nick) throws InterruptedException {
-        Object lock = new Object();
+        final Object lock = new Object();
         NickServCallBack callBack = new NickServCallBack(nick, lock);
         server.send(new PrivMsgIrcPacket("NickServ", "ACC " + nick + " *"), callBack);
         synchronized(lock) {
@@ -42,7 +43,8 @@ public class NickServ {
         }
 
         @Override
-        public boolean onIrcPacket(IrcPacket packet) {
+        public boolean onReceivedPacket(ReceivedPacketEvent event) {
+            IrcPacket packet = event.getPacket();
             Source source = packet.getPrefixAsSource(server);
             if(source == null || !source.getName().equals("NickServ")) {
                 return false;
@@ -65,6 +67,7 @@ public class NickServ {
                 Status.fromInt(Integer.parseInt(matcher.group("code"))),
                 matcher.group("precision")
             );
+            event.consume();
 
             synchronized(lock) {
                 lock.notify();
@@ -100,7 +103,11 @@ public class NickServ {
         public Response(String nick, String account, Status status, String precision) {
             this.nick = nick;
             this.account = account;
-            this.status = status;
+            if(status == Status.UserOffline) {
+                this.status = "offline".equals(precision) ? status : Status.UserUnrecognized;
+            } else {
+                this.status = status;
+            }
             this.precision = precision;
         }
 
