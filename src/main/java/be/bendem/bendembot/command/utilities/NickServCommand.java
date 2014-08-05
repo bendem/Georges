@@ -1,5 +1,8 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.utilities;
 
+import be.bendem.bendembot.IrcClient;
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.CommandContext;
 import be.bendem.bendembot.utils.NickServ;
 
 import java.util.List;
@@ -9,18 +12,25 @@ import java.util.List;
  */
 public class NickServCommand extends BaseCommand {
 
-    public NickServCommand() {
+    private final IrcClient bot;
+
+    public NickServCommand(IrcClient bot) {
         super("nickserv", new String[] {
             "Check if a user if authenticated to NickServ - Usage ## [name]"
         }, "ns");
+        this.bot = bot;
     }
 
     @Override
-    protected void exec(String primaryArgument, List<String> args) {
-        String nick = args.size() == 0 ? user.getName() : args.get(0);
+    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+        if("auth".equals(primaryArgument)) {
+            bot.auth(context.getServer());
+            return;
+        }
+        String nick = args.size() == 0 ? context.getUser().getName() : args.get(0);
         NickServ.Response response;
         try {
-            response = NickServ.check(server, nick);
+            response = NickServ.check(context.getServer(), nick);
         } catch(InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -41,6 +51,6 @@ public class NickServCommand extends BaseCommand {
             default:
                 throw new AssertionError("a wild enum value appeared");
         }
-        message(message.append('.').toString());
+        context.message(message.append('.').toString());
     }
 }

@@ -1,4 +1,4 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.javadocs;
 
 import be.bendem.bendembot.BendemBot;
 import be.bendem.bendembot.IrcClient;

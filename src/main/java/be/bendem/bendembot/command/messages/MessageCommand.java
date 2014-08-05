@@ -1,5 +1,10 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.messages;
 
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.CommandContext;
+import fr.ribesg.alix.api.Channel;
+import fr.ribesg.alix.api.Server;
+import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.enums.Codes;
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,37 +43,37 @@ public class MessageCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(String primaryArgument, List<String> args) {
+    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
         if(args.size() == 0) {
-            error("Invalid number of arguments");
+            context.error("Invalid number of arguments");
             return;
         }
         String name = args.get(0).toLowerCase();
         Action action = Action.get(primaryArgument);
         if(action == null) {
-            error("Unknown action");
+            context.error("Unknown action");
             return;
         }
 
         switch(action) {
             case Display:
-                display(name);
+                display(name, context);
                 break;
             case Get:
-                get(name);
+                get(name, context);
                 break;
             case Set:
-                set(name, StringUtils.join(args.listIterator(1), ' '));
+                set(name, StringUtils.join(args.listIterator(1), ' '), context);
                 break;
             case Delete:
-                delete(name);
+                delete(name, context);
                 break;
         }
     }
 
-    private void display(String name) {
+    private void display(String name, CommandContext context) {
         if(!messages.containsKey(name)) {
-            error("Message not found");
+            context.error("Message not found");
             return;
         }
 
@@ -76,6 +81,10 @@ public class MessageCommand extends BaseCommand {
         for(Map.Entry<String, String> entry : data.entrySet()) {
             message = message.replace('{' + entry.getKey() + '}', entry.getValue());
         }
+
+        Source user = context.getUser();
+        Server server = context.getServer();
+        Channel channel = context.getChannel();
 
         message = message
             .replace("{usernick}", user.getName())
@@ -90,29 +99,29 @@ public class MessageCommand extends BaseCommand {
             .replace("{channeltopic}", channel.getTopic() == null ? Codes.ITALIC + "No topic" + Codes.ITALIC : channel.getTopic())
             ;
 
-        message(message);
+        context.message(message);
     }
 
-    private void get(String name) {
+    private void get(String name, CommandContext context) {
         if(!messages.containsKey(name)) {
-            error("Message not found");
+            context.error("Message not found");
             return;
         }
-        message(messages.get(name));
+        context.message(messages.get(name));
     }
 
-    private void set(String name, String value) {
+    private void set(String name, String value, CommandContext context) {
         messages.put(name, value);
-        message(name + " message set");
+        context.message(name + " message set");
     }
 
-    private void delete(String name) {
+    private void delete(String name, CommandContext context) {
         if(!messages.containsKey(name)) {
-            error(name + " not found");
+            context.error(name + " not found");
             return;
         }
         messages.remove(name);
-        message(name + " deleted");
+        context.message(name + " deleted");
     }
 
     private enum Action {

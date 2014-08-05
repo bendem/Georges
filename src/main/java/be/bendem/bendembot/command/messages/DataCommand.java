@@ -1,5 +1,7 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.messages;
 
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.CommandContext;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -21,55 +23,55 @@ public class DataCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(String primaryArgument, List<String> args) {
+    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
         if(args.size() == 0) {
-            error("Invalid number of arguments");
+            context.error("Invalid number of arguments");
             return;
         }
         String key = args.get(0).toLowerCase();
         Action action = Action.get(primaryArgument);
         if(action == null) {
-            error("Unknown action");
+            context.error("Unknown action");
             return;
         }
 
         switch(action) {
             case Get:
-                get(key);
+                get(key, context);
                 break;
             case Set:
-                set(key, StringUtils.join(args.listIterator(1), ' '));
+                set(key, StringUtils.join(args.listIterator(1), ' '), context);
                 break;
             case Delete:
-                delete(key);
+                delete(key, context);
                 break;
         }
     }
 
-    private void get(String key) {
+    private void get(String key, CommandContext context) {
         if(!data.containsKey(key)) {
-            error(key + " not found");
+            context.error(key + " not found");
             return;
         }
-        message(key + ": " + data.get(key));
+        context.message(key + ": " + data.get(key));
     }
 
-    private void set(String key, String value) {
+    private void set(String key, String value, CommandContext context) {
         if(specials.contains(key)) {
-            error("Can't override special values");
+            context.error("Can't override special values");
             return;
         }
         data.put(key, value);
-        message(key + " value set");
+        context.message(key + " value set");
     }
 
-    private void delete(String key) {
+    private void delete(String key, CommandContext context) {
         if(!data.containsKey(key)) {
-            error(key + " not found");
+            context.error(key + " not found");
             return;
         }
         data.remove(key);
-        message(key + " deleted");
+        context.message(key + " deleted");
     }
 
     private enum Action {

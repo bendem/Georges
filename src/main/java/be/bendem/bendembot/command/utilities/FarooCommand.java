@@ -1,5 +1,7 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.utilities;
 
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.CommandContext;
 import be.bendem.bendembot.utils.GistStacks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -38,18 +40,18 @@ public class FarooCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(String primaryArgument, List<String> args) {
+    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
         Source source = Source.get(primaryArgument);
         if(source == null) {
             source = Source.web;
         }
         if(source == Source.topics) {
-            error("This type is not supported yet (and will never be AHAHAHAHAHAHAHAH!)");
+            context.error("This type is not supported yet (and will never be AHAHAHAHAHAHAHAH!)");
             return;
         }
-        String response = get(StringUtils.join(args, ' '), source);
+        String response = get(StringUtils.join(args, ' '), source, context);
         if(response == null) {
-            error("Error while fetching datas");
+            context.error("Error while fetching datas");
             return;
         }
 
@@ -70,7 +72,7 @@ public class FarooCommand extends BaseCommand {
                 break;
         }
         if(message != null) {
-            message(message);
+            context.message(message);
         }
     }
 
@@ -102,8 +104,7 @@ public class FarooCommand extends BaseCommand {
 
         JsonArray results = search.getAsJsonArray("results");
         if(results == null || results.size() == 0) {
-            error("No result");
-            return null;
+            return Codes.RED + "No result";
         }
 
         JsonObject result = results.get(0).getAsJsonObject();
@@ -113,11 +114,11 @@ public class FarooCommand extends BaseCommand {
         return Codes.BOLD + title + Codes.BOLD + ": " + content + " (" + url + ')';
     }
 
-    private String get(String query, Source src) {
+    private String get(String query, Source src, CommandContext context) {
         try {
             return WebUtil.get(FAROO_ENDPOINT.replace(":query", URLEncoder.encode(query, "utf-8")).replace(":src", src.name().toLowerCase()), DEFAULT_HEADERS);
         } catch(IOException e) {
-            error("Such stacktrace: " + GistStacks.gist(e));
+            context.error("Such stacktrace: " + GistStacks.gist(e));
             e.printStackTrace();
             return null;
         }

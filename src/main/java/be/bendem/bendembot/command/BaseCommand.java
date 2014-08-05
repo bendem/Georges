@@ -6,7 +6,6 @@ import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.bot.command.Command;
-import fr.ribesg.alix.api.enums.Codes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,11 +14,7 @@ import java.util.Set;
 /**
  * @author bendem
  */
-/* package */ abstract class BaseCommand extends Command {
-
-    protected Server server;
-    protected Channel channel;
-    protected Source user;
+public abstract class BaseCommand extends Command {
 
     public BaseCommand(String name) {
         this(name, null);
@@ -59,38 +54,16 @@ import java.util.Set;
      */
     @Override
     public synchronized boolean exec(Server server, Channel channel, Source user, String primaryArgument, String[] args) {
-        this.server = server;
-        this.channel = channel;
-        this.user = user;
+        CommandContext context = new CommandContext(server, channel, user);
         try {
-            this.exec(primaryArgument, Arrays.asList(args));
+            this.exec(context, primaryArgument, Arrays.asList(args));
         } catch(Exception e) {
             Log.error("Error while executing " + getClass().getSimpleName() + " command", e);
-            error("A problem happened, you might want to check " + GistStacks.gist(e), false);
-        } finally {
-            this.server = null;
-            this.channel = null;
-            this.user = null;
+            context.error("A problem happened, you might want to check " + GistStacks.gist(e), false);
         }
         return true;
     }
 
-    protected abstract void exec(String primaryArgument, List<String> args);
-
-    protected void error(String message) {
-        error(message, true);
-    }
-
-    protected void error(String message, boolean includeName) {
-        message(Codes.RED + (includeName ? user.getName() + ", " : "") + message, false);
-    }
-
-    protected void message(String message) {
-        message(message, true);
-    }
-
-    protected void message(String message, boolean includeName) {
-        (channel == null ? user : channel).sendMessage((includeName ? user.getName() + ", " : "") + message);
-    }
+    protected abstract void exec(CommandContext context, String primaryArgument, List<String> args);
 
 }

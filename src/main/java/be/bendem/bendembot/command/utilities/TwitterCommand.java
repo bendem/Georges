@@ -1,5 +1,7 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.utilities;
 
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.CommandContext;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -45,7 +47,7 @@ public class TwitterCommand extends BaseCommand {
     }
 
     @Override
-    public void exec(String primaryArgument, List<String> args) {
+    public void exec(CommandContext context, String primaryArgument, List<String> args) {
         Map<String, String> params = new HashMap<>();
         JsonObject tweet;
 
@@ -61,12 +63,12 @@ public class TwitterCommand extends BaseCommand {
         }
 
         if(tweet == null) {
-            error("Error while loading tweet");
+            context.error("Error while loading tweet");
             return;
         }
 
         String message = tweet.get("text").getAsString() + " by @" + tweet.getAsJsonObject("user").get("screen_name").getAsString();
-        message(message);
+        context.message(message);
     }
 
     private JsonElement get(String route, Map<String, String> params) {

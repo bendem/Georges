@@ -1,14 +1,16 @@
 package be.bendem.bendembot;
 
-import be.bendem.bendembot.command.DataCommand;
-import be.bendem.bendembot.command.FarooCommand;
-import be.bendem.bendembot.command.JoinCommand;
-import be.bendem.bendembot.command.LeaveCommand;
-import be.bendem.bendembot.command.MessageCommand;
-import be.bendem.bendembot.command.NickCommand;
-import be.bendem.bendembot.command.NickServCommand;
-import be.bendem.bendembot.command.QuitCommand;
-import be.bendem.bendembot.command.TwitterCommand;
+import be.bendem.bendembot.command.bot.ChannelsCommand;
+import be.bendem.bendembot.command.messages.DataCommand;
+import be.bendem.bendembot.command.utilities.FarooCommand;
+import be.bendem.bendembot.command.bot.JoinCommand;
+import be.bendem.bendembot.command.bot.LeaveCommand;
+import be.bendem.bendembot.command.messages.MessageCommand;
+import be.bendem.bendembot.command.bot.NickCommand;
+import be.bendem.bendembot.command.utilities.NickServCommand;
+import be.bendem.bendembot.command.utilities.PingCommand;
+import be.bendem.bendembot.command.bot.QuitCommand;
+import be.bendem.bendembot.command.utilities.TwitterCommand;
 import be.bendem.bendembot.custompackets.ActionIrcPacket;
 import be.bendem.bendembot.filters.ChatFilter;
 import be.bendem.bendembot.usermanagement.UserManager;
@@ -76,11 +78,13 @@ public class IrcClient extends Client {
         manager.registerCommand(new LeaveCommand());
         manager.registerCommand(new QuitCommand(this));
         manager.registerCommand(new NickCommand(this));
+        manager.registerCommand(new ChannelsCommand());
 
         // Utility commands
         manager.registerCommand(new TwitterCommand());
         manager.registerCommand(new FarooCommand());
-        manager.registerCommand(new NickServCommand());
+        manager.registerCommand(new NickServCommand(this));
+        manager.registerCommand(new PingCommand());
 
         // Message commands
         Map<String, String> data = new HashMap<>();
@@ -99,6 +103,10 @@ public class IrcClient extends Client {
 
     @Override
     public void onServerJoined(final Server server) {
+        auth(server);
+    }
+
+    public void auth(final Server server) {
         if(server.getName().equals("Esper")) {
             server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY espc0waychal@"));
         }

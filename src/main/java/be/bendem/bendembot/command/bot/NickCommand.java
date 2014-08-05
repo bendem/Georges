@@ -1,6 +1,8 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.command.bot;
 
 import be.bendem.bendembot.IrcClient;
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.CommandContext;
 import fr.ribesg.alix.api.message.NickIrcPacket;
 
 import java.util.List;
@@ -17,12 +19,12 @@ public class NickCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(String primaryArgument, List<String> args) {
+    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
         if(args.size() == 0) {
-            error("Not enough arguments");
+            context.error("Not enough arguments");
             return;
         }
-        server.send(new NickIrcPacket(args.get(0)));
+        context.getServer().send(new NickIrcPacket(args.get(0)));
     }
 
 }
