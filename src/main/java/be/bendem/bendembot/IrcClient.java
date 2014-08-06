@@ -1,15 +1,13 @@
 package be.bendem.bendembot;
 
-import be.bendem.bendembot.command.bot.ChannelsCommand;
-import be.bendem.bendembot.command.messages.DataCommand;
-import be.bendem.bendembot.command.utilities.FarooCommand;
-import be.bendem.bendembot.command.bot.JoinCommand;
-import be.bendem.bendembot.command.bot.LeaveCommand;
-import be.bendem.bendembot.command.messages.MessageCommand;
+import be.bendem.bendembot.command.bot.ChannelCommand;
 import be.bendem.bendembot.command.bot.NickCommand;
+import be.bendem.bendembot.command.bot.QuitCommand;
+import be.bendem.bendembot.command.messages.DataCommand;
+import be.bendem.bendembot.command.messages.MessageCommand;
+import be.bendem.bendembot.command.utilities.FarooCommand;
 import be.bendem.bendembot.command.utilities.NickServCommand;
 import be.bendem.bendembot.command.utilities.PingCommand;
-import be.bendem.bendembot.command.bot.QuitCommand;
 import be.bendem.bendembot.command.utilities.TwitterCommand;
 import be.bendem.bendembot.custompackets.ActionIrcPacket;
 import be.bendem.bendembot.filters.ChatFilter;
@@ -74,11 +72,9 @@ public class IrcClient extends Client {
         manager.setUnknownCommandMessage(null);
 
         // Control commands
-        manager.registerCommand(new JoinCommand());
-        manager.registerCommand(new LeaveCommand());
+        manager.registerCommand(new ChannelCommand());
         manager.registerCommand(new QuitCommand(this));
         manager.registerCommand(new NickCommand(this));
-        manager.registerCommand(new ChannelsCommand());
 
         // Utility commands
         manager.registerCommand(new TwitterCommand());
