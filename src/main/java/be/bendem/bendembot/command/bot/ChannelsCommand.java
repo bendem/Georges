@@ -2,9 +2,7 @@ package be.bendem.bendembot.command.bot;
 
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.command.CommandContext;
-import fr.ribesg.alix.api.Channel;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
