@@ -7,7 +7,9 @@ import fr.ribesg.alix.api.Receiver;
 import fr.ribesg.alix.api.message.PartIrcPacket;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author bendem
@@ -17,7 +19,7 @@ public class ChannelCommand extends BaseCommand {
     public ChannelCommand() {
         super("channel", new String[] {
             "Channel control - Usage: ##.<list|join|leave> [channel]"
-        });
+        }, "c");
     }
 
     @Override
@@ -29,6 +31,8 @@ public class ChannelCommand extends BaseCommand {
             } else {
                 channel = '#' + args.get(0);
             }
+        } else if(context.getChannel() != null) {
+            channel = context.getChannel().getName();
         }
 
         switch(Action.get(primaryArgument)) {
@@ -40,6 +44,9 @@ public class ChannelCommand extends BaseCommand {
                 break;
             case Leave:
                 leave(context, channel);
+                break;
+            case Users:
+                users(context, channel);
                 break;
         }
     }
@@ -66,6 +73,10 @@ public class ChannelCommand extends BaseCommand {
     }
 
     private void leave(CommandContext context, String channel) {
+        if(channel == null) {
+            context.error("You're not in a channel, tell me which one I should leave");
+            return;
+        }
         Channel channelToLeave = context.getServer().getChannel(channel);
         if(channelToLeave == null) {
             context.error("channel not found");
@@ -74,8 +85,52 @@ public class ChannelCommand extends BaseCommand {
         context.getServer().send(new PartIrcPacket(channelToLeave.getName()));
     }
 
+    private void users(CommandContext context, String channel) {
+        if(channel == null) {
+            context.error("No channel provided :(");
+            return;
+        }
+        Channel channelToList = context.getServer().getChannel(channel);
+        if(channelToList == null) {
+            context.error("I'm not in this channel :'(");
+            return;
+        }
+        Set<String> users = channelToList.getUsers();
+        if(users.isEmpty()) {
+            context.error("No user? Really?");
+            return;
+        }
+        Iterator<String> sorted = users.stream().sorted((user1, user2) -> {
+            Permission permA = Permission.fromChar(user1.charAt(0));
+            Permission permB = Permission.fromChar(user2.charAt(0));
+            if(permA.ordinal() > permB.ordinal())
+                return 1;
+            if(permA.ordinal() < permB.ordinal())
+                return -1;
+            return user1.compareTo(user2);
+        }).iterator();
+        // TODO Filter if too much users
+        context.message(
+            "There are " + users.size() + " users in " + channel
+            + " (" + channelToList.getOps().size() + " ops and " + channelToList.getVoiced().size() + " voiced): "
+            + StringUtils.join(sorted, ", ") + '.'
+        );
+    }
+
+    private enum Permission {
+        Op, Voice, User;
+
+        public static Permission fromChar(char c) {
+            switch(c) {
+                case '@': return Op;
+                case '+': return Voice;
+                default:  return User;
+            }
+        }
+    }
+
     private enum Action {
-        List, Join, Leave;
+        List, Join, Leave, Users;
 
         public static Action get(String name) {
             for(Action action : values()) {
