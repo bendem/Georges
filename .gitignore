@@ -3,6 +3,7 @@ target/
 *.iml
 *.log
 *.log.*
+*.yml
 
 dependency-reduced-pom.xml
 log4j2.xml
