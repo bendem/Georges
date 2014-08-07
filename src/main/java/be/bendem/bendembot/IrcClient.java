@@ -32,7 +32,6 @@ import fr.ribesg.alix.api.event.UserPartChannelEvent;
 import fr.ribesg.alix.api.message.IrcPacket;
 import fr.ribesg.alix.api.message.ModeIrcPacket;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
-import fr.ribesg.alix.api.network.ssl.SSLType;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -94,10 +93,14 @@ public class IrcClient extends Client {
 
         // Utility commands
         manager.registerCommand(new UserCommand(this));
-        manager.registerCommand(new TwitterCommand());
         manager.registerCommand(new FarooCommand(configuration.getFarooKey()));
         manager.registerCommand(new NickServCommand(this));
         manager.registerCommand(new PingCommand());
+        manager.registerCommand(new TwitterCommand(
+            configuration.getTwitterApiKey(),
+            configuration.getTwitterApiKeySecret(),
+            configuration.getTwitterAccessToken(),
+            configuration.getTwitterAccessTokenSecret()));
 
         // Message commands
         Map<String, String> data = new HashMap<>();

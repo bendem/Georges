@@ -25,25 +25,17 @@ import java.util.Map;
 public class TwitterCommand extends BaseCommand {
 
     private static final String TWITTER_ENDPOINT = "https://api.twitter.com/1.1/";
-    private static final String API_KEY = "eQ0pSR4zVmvJaWSt9FetK3lok";
-    private static final String API_KEY_SECRET = "D2nI8SNvW1LcQlG229jhULFkvbxd7zbVkquRu45j2jytFzr1hf";
-    private static final String ACCESS_TOKEN = "414336935-wZXskNUxT1GGMG91uIlKr5lLLZIRBxcpeI6y8SIa";
-    private static final String ACCESS_TOKEN_SECRET = "dOCsPkNOFG2Yo8iJJ3Jz8jurvHtW2j3C3b3g2jdE6Fe6x";
 
     private final OAuthService service;
-    private final Token accessToken;
+    private final Token        token;
 
-    public TwitterCommand() {
+    public TwitterCommand(String apiKey, String apiKeySecret, String accessToken, String accessTokenSecret) {
         super("twitter", new String[] {
             "Twitter command - Usage ##.<id|username>"
         }, "tw");
 
-        service = new ServiceBuilder()
-            .provider(TwitterApi.class)
-            .apiKey(API_KEY)
-            .apiSecret(API_KEY_SECRET)
-            .build();
-        accessToken = new Token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+        service = new ServiceBuilder().provider(TwitterApi.class).apiKey(apiKey).apiSecret(apiKeySecret).build();
+        token = new Token(accessToken, accessTokenSecret);
     }
 
     @Override
@@ -78,7 +70,7 @@ public class TwitterCommand extends BaseCommand {
         Log.info(url.toString());
 
         OAuthRequest request = new OAuthRequest(Verb.GET, url.toString());
-        service.signRequest(accessToken, request);
+        service.signRequest(token, request);
         Response response = request.send();
         if(response.getBody() == null) {
             throw new RuntimeException("Api response body was null");
