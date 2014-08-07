@@ -1,5 +1,6 @@
 package be.bendem.bendembot;
 
+import be.bendem.bendembot.command.utilities.UserCommand;
 import be.bendem.bendembot.command.bot.ChannelCommand;
 import be.bendem.bendembot.command.bot.NickCommand;
 import be.bendem.bendembot.command.bot.QuitCommand;
@@ -9,6 +10,7 @@ import be.bendem.bendembot.command.utilities.FarooCommand;
 import be.bendem.bendembot.command.utilities.NickServCommand;
 import be.bendem.bendembot.command.utilities.PingCommand;
 import be.bendem.bendembot.command.utilities.TwitterCommand;
+import be.bendem.bendembot.configuration.Configuration;
 import be.bendem.bendembot.custompackets.ActionIrcPacket;
 import be.bendem.bendembot.filters.ChatFilter;
 import be.bendem.bendembot.usermanagement.UserManager;
@@ -32,6 +34,7 @@ import fr.ribesg.alix.api.message.ModeIrcPacket;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
 import fr.ribesg.alix.api.network.ssl.SSLType;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -42,9 +45,9 @@ import java.util.Set;
  */
 public class IrcClient extends Client {
 
+    private final Configuration configuration;
     private final UserManager     userManager;
     private final Set<ChatFilter> filters;
-    private final Set<String>     admins;
     private long lastSpoke = Time.now();
     private long lastJoke  = 0;
 
@@ -54,10 +57,14 @@ public class IrcClient extends Client {
 
         PasteUtil.setMode(null);
 
-        admins = new HashSet<>();
-        admins.add("bendem");
-
-        EventManager.register(this);
+        configuration = new Configuration(this);
+        if(!configuration.exists()) {
+            try {
+                configuration.save();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         filters = new HashSet<>();
         userManager = new UserManager(this);
@@ -73,15 +80,11 @@ public class IrcClient extends Client {
     }
 
     public void loadItMyself() {
-        Server server = new Server(this, "Esper", getName(), getName(), "irc.esper.net", 6697, null, SSLType.TRUSTING);
-        server.addChannel("#Georges");
-        //server.addChannel("#bendemPlugins");
+        getServers().addAll(configuration.getServers());
 
-        getServers().add(server);
+        EventManager.register(this);
 
-        //AlixConfiguration configuration = new AlixConfiguration("alix.yml");
-
-        CommandManager manager = createCommandManager("`", admins);
+        CommandManager manager = createCommandManager("`", configuration.getAdmins());
         manager.setUnknownCommandMessage(null);
 
         // Control commands
@@ -90,8 +93,9 @@ public class IrcClient extends Client {
         manager.registerCommand(new NickCommand());
 
         // Utility commands
+        manager.registerCommand(new UserCommand(this));
         manager.registerCommand(new TwitterCommand());
-        manager.registerCommand(new FarooCommand());
+        manager.registerCommand(new FarooCommand(configuration.getFarooKey()));
         manager.registerCommand(new NickServCommand(this));
         manager.registerCommand(new PingCommand());
 
@@ -176,7 +180,8 @@ public class IrcClient extends Client {
 
     public void auth(final Server server) {
         if(server.getName().equals("Esper")) {
-            server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY espc0waychal@"));
+            Log.debug("Pass: '" + configuration.getEsperPass() + '\'');
+            server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY " + configuration.getEsperPass()));
         }
     }
 
@@ -209,11 +214,15 @@ public class IrcClient extends Client {
     }
 
     public boolean isBotAdmin(String name) {
-        return admins.contains(name);
+        return configuration.getAdmins().contains(name);
     }
 
     public UserManager getUserManager() {
         return userManager;
+    }
+
+    public Set<String> getAdmins() {
+        return configuration.getAdmins();
     }
 
     // Let's kill that bot correctly

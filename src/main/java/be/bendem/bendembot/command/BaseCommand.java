@@ -21,15 +21,15 @@ public abstract class BaseCommand extends Command {
     }
 
     public BaseCommand(String name, String[] usage) {
-        super(name, usage, false, null);
+        this(name, usage, false);
     }
 
     public BaseCommand(String name, String[] usage, String... aliases) {
-        super(name, usage, false, null, aliases);
+        this(name, usage, false, null, aliases);
     }
 
     public BaseCommand(String name, String[] usage, boolean restricted) {
-        super(name, usage, restricted, null);
+        this(name, usage, restricted, (Set<String>) null);
     }
 
     public BaseCommand(String name, String[] usage, boolean restricted, String... aliases) {

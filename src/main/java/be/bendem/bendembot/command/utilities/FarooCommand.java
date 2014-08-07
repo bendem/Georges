@@ -30,13 +30,14 @@ public class FarooCommand extends BaseCommand {
         DEFAULT_HEADERS = Collections.unmodifiableMap(map);
     }
 
-    private static final String FAROO_KEY = "x7ZRD9aj8hFlz1vxVtA6M3-MqvA_";
-    private static final String FAROO_ENDPOINT = "http://www.faroo.com/api?q=:query&start=1&length=1&l=en&src=:src&kwic=true&i=false&f=json&key=" + FAROO_KEY;
+    private static final String FAROO_ENDPOINT = "http://www.faroo.com/api?q=:query&start=1&length=1&l=en&src=:src&kwic=true&i=false&f=json&key=:key";
+    private final String key;
 
-    public FarooCommand() {
-        super("faroo", new String[]{
+    public FarooCommand(String key) {
+        super("faroo", new String[] {
             "Search for something using the Faroo api - Usage: ##.<web|news|topics|trends|suggest> research"
         });
+        this.key = key;
     }
 
     @Override
@@ -116,7 +117,13 @@ public class FarooCommand extends BaseCommand {
 
     private String get(String query, Source src, CommandContext context) {
         try {
-            return WebUtil.get(FAROO_ENDPOINT.replace(":query", URLEncoder.encode(query, "utf-8")).replace(":src", src.name().toLowerCase()), DEFAULT_HEADERS);
+            return WebUtil.get(
+                FAROO_ENDPOINT
+                    .replace(":query", URLEncoder.encode(query, "utf-8"))
+                    .replace(":src", src.name().toLowerCase())
+                    .replace(":key", URLEncoder.encode(key, "utf-8")),
+                DEFAULT_HEADERS
+            );
         } catch(IOException e) {
             context.error("Such stacktrace: " + GistStacks.gist(e));
             e.printStackTrace();
