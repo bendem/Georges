@@ -1,6 +1,5 @@
 package be.bendem.bendembot.command.bot;
 
-import be.bendem.bendembot.IrcClient;
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.command.CommandContext;
 import fr.ribesg.alix.api.message.NickIrcPacket;
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class NickCommand extends BaseCommand {
 
-    public NickCommand(IrcClient ircClient) {
+    public NickCommand() {
         super("nick", new String[]{
             "Change bot nick"
         }, true);

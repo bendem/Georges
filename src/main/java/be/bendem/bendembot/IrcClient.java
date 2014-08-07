@@ -19,6 +19,12 @@ import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.bot.command.CommandManager;
+import fr.ribesg.alix.api.event.ChannelMessageEvent;
+import fr.ribesg.alix.api.event.ClientJoinChannelEvent;
+import fr.ribesg.alix.api.event.EventHandler;
+import fr.ribesg.alix.api.event.ReceivedPacketEvent;
+import fr.ribesg.alix.api.event.ServerJoinEvent;
+import fr.ribesg.alix.api.event.UserPartChannelEvent;
 import fr.ribesg.alix.api.message.IrcPacket;
 import fr.ribesg.alix.api.message.ModeIrcPacket;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
@@ -74,7 +80,7 @@ public class IrcClient extends Client {
         // Control commands
         manager.registerCommand(new ChannelCommand());
         manager.registerCommand(new QuitCommand(this));
-        manager.registerCommand(new NickCommand(this));
+        manager.registerCommand(new NickCommand());
 
         // Utility commands
         manager.registerCommand(new TwitterCommand());
@@ -97,24 +103,21 @@ public class IrcClient extends Client {
         //filters.add(new MessageFilter(this));
     }
 
-    @Override
-    public void onServerJoined(final Server server) {
-        auth(server);
+    @EventHandler
+    public void onServerJoined(final ServerJoinEvent e) {
+        auth(e.getServer());
     }
 
-    public void auth(final Server server) {
-        if(server.getName().equals("Esper")) {
-            server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY espc0waychal@"));
-        }
+    @EventHandler
+    public void onClientJoinChannel(final ClientJoinChannelEvent e) {
+        //e.getChannel().sendMessage("\\o");
     }
 
-    @Override
-    public void onClientJoinChannel(final Channel channel) {
-        //channel.sendMessage("\\o");
-    }
+    @EventHandler
+    public void onRawIrcMessage(ReceivedPacketEvent e) {
+        Server server = e.getSource();
+        IrcPacket ircPacket = e.getPacket();
 
-    @Override
-    public void onRawIrcMessage(Server server, IrcPacket ircPacket) {
         if(ircPacket instanceof ModeIrcPacket) {
             Log.info("MODE Packet handled");
             ModeIrcPacket modePacket = (ModeIrcPacket) ircPacket;
@@ -132,8 +135,12 @@ public class IrcClient extends Client {
         }
     }
 
-    @Override
-    public void onChannelMessage(final Channel channel, final Source author, final String message) {
+    @EventHandler
+    public void onChannelMessage(final ChannelMessageEvent e) {
+        Channel channel = e.getChannel();
+        Source author = e.getUser();
+        String message = e.getMessage();
+
         for(ChatFilter filter : filters) {
             if(filter.handleMessage(channel, author, message)) {
                 break;
@@ -153,10 +160,16 @@ public class IrcClient extends Client {
 
     }
 
-    @Override
-    public void onUserPartChannel(Source source, Channel channel) {
+    @EventHandler
+    public void onUserPartChannel(UserPartChannelEvent e) {
         for(ChatFilter filter : filters) {
-            filter.forgetUser(source, channel);
+            filter.forgetUser(e.getUser(), e.getChannel());
+        }
+    }
+
+    public void auth(final Server server) {
+        if(server.getName().equals("Esper")) {
+            server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY espc0waychal@"));
         }
     }
 

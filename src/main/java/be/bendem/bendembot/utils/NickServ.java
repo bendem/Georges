@@ -5,9 +5,9 @@ import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.callback.Callback;
 import fr.ribesg.alix.api.enums.Command;
+import fr.ribesg.alix.api.event.ReceivedPacketEvent;
 import fr.ribesg.alix.api.message.IrcPacket;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
-import fr.ribesg.alix.internal.network.ReceivedPacketEvent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.regex.Matcher;
@@ -37,15 +37,15 @@ public class NickServ {
         private       Response response;
 
         private NickServCallBack(String nick, Object lock) {
-            super(Command.NOTICE.name());
+            super(10_000, Command.NOTICE.name());
             this.nick = nick;
             this.lock = lock;
         }
 
         @Override
-        public boolean onReceivedPacket(ReceivedPacketEvent event) {
-            IrcPacket packet = event.getPacket();
-            Source source = packet.getPrefixAsSource(server);
+        public boolean onReceivedPacket(ReceivedPacketEvent e) {
+            IrcPacket packet = e.getPacket();
+            Source source = packet.getPrefixAsSource(e.getSource());
             if(source == null || !source.getName().equals("NickServ")) {
                 return false;
             }
@@ -67,7 +67,7 @@ public class NickServ {
                 Status.fromInt(Integer.parseInt(matcher.group("code"))),
                 matcher.group("precision")
             );
-            event.consume();
+            e.consume();
 
             synchronized(lock) {
                 lock.notify();
@@ -77,6 +77,13 @@ public class NickServ {
 
         public Response getResponse() {
             return response;
+        }
+
+        @Override
+        public void onTimeout() {
+            synchronized(lock) {
+                lock.notify();
+            }
         }
 
     }

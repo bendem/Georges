@@ -32,7 +32,8 @@ public class NickServCommand extends BaseCommand {
         try {
             response = NickServ.check(context.getServer(), nick);
         } catch(InterruptedException e) {
-            throw new RuntimeException(e);
+            context.error("Timeout :(");
+            return;
         }
         StringBuilder message = new StringBuilder(response.getNick());
         switch(response.getStatus()) {
