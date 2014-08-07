@@ -15,10 +15,12 @@ import be.bendem.bendembot.usermanagement.UserManager;
 import be.bendem.bendembot.utils.Time;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Client;
+import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.bot.command.CommandManager;
+import fr.ribesg.alix.api.bot.util.PasteUtil;
 import fr.ribesg.alix.api.event.ChannelMessageEvent;
 import fr.ribesg.alix.api.event.ClientJoinChannelEvent;
 import fr.ribesg.alix.api.event.EventHandler;
@@ -49,8 +51,13 @@ public class IrcClient extends Client {
     public IrcClient(String name) {
         super(name);
         Log.debug("Starting up...");
+
+        PasteUtil.setMode(null);
+
         admins = new HashSet<>();
         admins.add("bendem");
+
+        EventManager.register(this);
 
         filters = new HashSet<>();
         userManager = new UserManager(this);
