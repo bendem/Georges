@@ -1,7 +1,7 @@
 package be.bendem.bendembot.command.bot;
 
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Receiver;
 import fr.ribesg.alix.api.message.PartIrcPacket;
@@ -23,7 +23,7 @@ public class ChannelCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+    protected void exec(Context context, String primaryArgument, List<String> args) {
         String channel = null;
         if(args.size() != 0) {
             if(args.get(0).startsWith("#")) {
@@ -51,7 +51,7 @@ public class ChannelCommand extends BaseCommand {
         }
     }
 
-    private void list(CommandContext context) {
+    private void list(Context context) {
         if(context.getServer().getChannels().size() == 0) {
             context.error("I'm alone in the dark, please save me :O");
         } else {
@@ -59,7 +59,7 @@ public class ChannelCommand extends BaseCommand {
         }
     }
 
-    private void join(CommandContext context, String channel) {
+    private void join(Context context, String channel) {
         if(channel == null) {
             context.error("No channel specified");
             return;
@@ -72,7 +72,7 @@ public class ChannelCommand extends BaseCommand {
         new Channel(context.getServer(), channel).join();
     }
 
-    private void leave(CommandContext context, String channel) {
+    private void leave(Context context, String channel) {
         if(channel == null) {
             context.error("You're not in a channel, tell me which one I should leave");
             return;
@@ -85,7 +85,7 @@ public class ChannelCommand extends BaseCommand {
         context.getServer().send(new PartIrcPacket(channelToLeave.getName()));
     }
 
-    private void users(CommandContext context, String channel) {
+    private void users(Context context, String channel) {
         if(channel == null) {
             context.error("No channel provided :(");
             return;

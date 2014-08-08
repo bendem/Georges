@@ -1,7 +1,7 @@
 package be.bendem.bendembot.command.utilities;
 
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.GistStacks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -41,7 +41,7 @@ public class FarooCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+    protected void exec(Context context, String primaryArgument, List<String> args) {
         Source source = Source.get(primaryArgument);
         if(source == null) {
             source = Source.web;
@@ -115,7 +115,7 @@ public class FarooCommand extends BaseCommand {
         return Codes.BOLD + title + Codes.BOLD + ": " + content + " (" + url + ')';
     }
 
-    private String get(String query, Source src, CommandContext context) {
+    private String get(String query, Source src, Context context) {
         try {
             return WebUtil.get(
                 FAROO_ENDPOINT

@@ -2,7 +2,7 @@ package be.bendem.bendembot.command.utilities;
 
 import be.bendem.bendembot.IrcClient;
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class UserCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+    protected void exec(Context context, String primaryArgument, List<String> args) {
         Action action = Action.get(primaryArgument);
         if(action.isRestricted() && !admins.contains(context.getUser().getName())) {
             context.error("You don't have the right to use that command :/");

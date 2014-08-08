@@ -1,13 +1,14 @@
 package be.bendem.bendembot.command.messages;
 
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.enums.Codes;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,14 @@ import java.util.Set;
 public class MessageCommand extends BaseCommand {
 
     private final Map<String, String> data;
-    private final Set<String> specials;
     private final Map<String, String> messages;
 
     public MessageCommand(Map<String, String> data, Set<String> specials) {
         super("message", new String[] {
-            "Message manipulation - Usage: ##.[set|get|display|delete] <name> [value]"
-        });
+            "Message manipulation - Usage: ##.<" + Action.joined('|') + "> <name> [value(s)]",
+            "Events can be used with data checks (but I don't like writing doc so guess them :/)"
+        }, true, "mes");
         this.data = data;
-        this.specials = specials;
         this.messages = new HashMap<>();
 
         specials.add("usernick");
@@ -43,7 +43,7 @@ public class MessageCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+    protected void exec(Context context, String primaryArgument, List<String> args) {
         if(args.size() == 0) {
             context.error("Invalid number of arguments");
             return;
@@ -71,7 +71,7 @@ public class MessageCommand extends BaseCommand {
         }
     }
 
-    private void display(String name, CommandContext context) {
+    private void display(String name, Context context) {
         if(!messages.containsKey(name)) {
             context.error("Message not found");
             return;
@@ -102,7 +102,7 @@ public class MessageCommand extends BaseCommand {
         context.message(message);
     }
 
-    private void get(String name, CommandContext context) {
+    private void get(String name, Context context) {
         if(!messages.containsKey(name)) {
             context.error("Message not found");
             return;
@@ -110,12 +110,12 @@ public class MessageCommand extends BaseCommand {
         context.message(messages.get(name));
     }
 
-    private void set(String name, String value, CommandContext context) {
+    private void set(String name, String value, Context context) {
         messages.put(name, value);
         context.message(name + " message set");
     }
 
-    private void delete(String name, CommandContext context) {
+    private void delete(String name, Context context) {
         if(!messages.containsKey(name)) {
             context.error(name + " not found");
             return;
@@ -125,7 +125,7 @@ public class MessageCommand extends BaseCommand {
     }
 
     private enum Action {
-        Display, Get, Set, Delete;
+        Display, Get, Set, Delete, Event;
 
         public static Action get(String name) {
             for(Action action : values()) {
@@ -134,6 +134,10 @@ public class MessageCommand extends BaseCommand {
                 }
             }
             return null;
+        }
+
+        public static String joined(char c) {
+            return StringUtils.join(Arrays.stream(Action.values()).map(Action::name).iterator(), c);
         }
     }
 

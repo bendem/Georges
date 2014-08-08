@@ -2,7 +2,7 @@ package be.bendem.bendembot.command.utilities;
 
 import be.bendem.bendembot.IrcClient;
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.NickServ;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class NickServCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+    protected void exec(Context context, String primaryArgument, List<String> args) {
         if("auth".equals(primaryArgument)) {
             bot.auth(context.getServer());
             return;

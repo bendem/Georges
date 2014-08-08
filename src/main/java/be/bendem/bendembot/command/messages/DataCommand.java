@@ -1,7 +1,7 @@
 package be.bendem.bendembot.command.messages;
 
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class DataCommand extends BaseCommand {
     }
 
     @Override
-    protected void exec(CommandContext context, String primaryArgument, List<String> args) {
+    protected void exec(Context context, String primaryArgument, List<String> args) {
         if(args.size() == 0) {
             context.error("Invalid number of arguments");
             return;
@@ -48,7 +48,7 @@ public class DataCommand extends BaseCommand {
         }
     }
 
-    private void get(String key, CommandContext context) {
+    private void get(String key, Context context) {
         if(!data.containsKey(key)) {
             context.error(key + " not found");
             return;
@@ -56,7 +56,7 @@ public class DataCommand extends BaseCommand {
         context.message(key + ": " + data.get(key));
     }
 
-    private void set(String key, String value, CommandContext context) {
+    private void set(String key, String value, Context context) {
         if(specials.contains(key)) {
             context.error("Can't override special values");
             return;
@@ -65,7 +65,7 @@ public class DataCommand extends BaseCommand {
         context.message(key + " value set");
     }
 
-    private void delete(String key, CommandContext context) {
+    private void delete(String key, Context context) {
         if(!data.containsKey(key)) {
             context.error(key + " not found");
             return;

@@ -1,5 +1,6 @@
 package be.bendem.bendembot.command;
 
+import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.GistStacks;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Log;
@@ -54,7 +55,7 @@ public abstract class BaseCommand extends Command {
      */
     @Override
     public synchronized boolean exec(Server server, Channel channel, Source user, String primaryArgument, String[] args) {
-        CommandContext context = new CommandContext(server, channel, user);
+        Context context = new Context(server, channel, user);
         try {
             this.exec(context, primaryArgument, Arrays.asList(args));
         } catch(Exception e) {
@@ -64,6 +65,6 @@ public abstract class BaseCommand extends Command {
         return true;
     }
 
-    protected abstract void exec(CommandContext context, String primaryArgument, List<String> args);
+    protected abstract void exec(Context context, String primaryArgument, List<String> args);
 
 }

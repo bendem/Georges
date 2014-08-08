@@ -1,7 +1,7 @@
 package be.bendem.bendembot.command.utilities;
 
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -39,7 +39,7 @@ public class TwitterCommand extends BaseCommand {
     }
 
     @Override
-    public void exec(CommandContext context, String primaryArgument, List<String> args) {
+    public void exec(Context context, String primaryArgument, List<String> args) {
         Map<String, String> params = new HashMap<>();
         JsonObject tweet;
 

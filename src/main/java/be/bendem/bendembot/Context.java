@@ -1,4 +1,4 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot;
 
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;
@@ -8,13 +8,13 @@ import fr.ribesg.alix.api.enums.Codes;
 /**
  * @author bendem
  */
-public class CommandContext {
+public class Context {
 
     private final Server  server;
     private final Channel channel;
     private final Source  user;
 
-    public CommandContext(Server server, Channel channel, Source user) {
+    public Context(Server server, Channel channel, Source user) {
         this.server = server;
         this.channel = channel;
         this.user = user;

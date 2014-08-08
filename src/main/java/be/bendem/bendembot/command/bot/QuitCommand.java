@@ -2,7 +2,7 @@ package be.bendem.bendembot.command.bot;
 
 import be.bendem.bendembot.IrcClient;
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.CommandContext;
+import be.bendem.bendembot.Context;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class QuitCommand extends BaseCommand {
     }
 
     @Override
-    public void exec(CommandContext context, String primaryArgument, List<String> args) {
+    public void exec(Context context, String primaryArgument, List<String> args) {
         context.getServer().disconnect("See ya on the road to hell!");
         bot.kill();
     }
