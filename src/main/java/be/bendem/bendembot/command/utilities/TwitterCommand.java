@@ -31,7 +31,7 @@ public class TwitterCommand extends BaseCommand {
 
     public TwitterCommand(String apiKey, String apiKeySecret, String accessToken, String accessTokenSecret) {
         super("twitter", new String[] {
-            "Twitter command - Usage ##.<id|username>"
+            "Twitter command - Usage ## <id|username>"
         }, "tw");
 
         service = new ServiceBuilder().provider(TwitterApi.class).apiKey(apiKey).apiSecret(apiKeySecret).build();
@@ -40,16 +40,22 @@ public class TwitterCommand extends BaseCommand {
 
     @Override
     public void exec(Context context, String primaryArgument, List<String> args) {
+        if(args.size() == 0) {
+            context.error("Not enough argument");
+            return;
+        }
+
+        String arg = args.get(0);
         Map<String, String> params = new HashMap<>();
         JsonObject tweet;
 
-        if(primaryArgument.matches("[0-9]+")) {
+        if(arg.matches("[0-9]+")) {
             // Get tweet by id
-            params.put(":id", primaryArgument);
+            params.put(":id", arg);
             tweet = get("statuses/show/:id.json", params).getAsJsonObject();
         } else {
             // Get last user tweet
-            params.put(":name", primaryArgument);
+            params.put(":name", arg);
             JsonArray timeline = get("statuses/user_timeline.json?screen_name=:name", params).getAsJsonArray();
             tweet = timeline.get(0).getAsJsonObject();
         }
