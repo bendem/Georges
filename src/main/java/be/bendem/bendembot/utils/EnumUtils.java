@@ -18,7 +18,12 @@ public class EnumUtils {
      * @return the names of the values joined together
      */
     public static <E extends Enum<E>> String joinValues(Class<E> enumType, String c) {
-        return StringUtils.join(Arrays.stream(enumType.getEnumConstants()).map(E::name).iterator(), c);
+        return StringUtils.join(
+            Arrays.stream(
+                enumType.getEnumConstants()).map((elem) -> elem.name().toLowerCase()
+            ).iterator(),
+            c
+        );
     }
 
     /**
