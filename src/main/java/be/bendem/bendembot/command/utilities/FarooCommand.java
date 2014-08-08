@@ -2,6 +2,7 @@ package be.bendem.bendembot.command.utilities;
 
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.GistStacks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -35,17 +36,14 @@ public class FarooCommand extends BaseCommand {
 
     public FarooCommand(String key) {
         super("faroo", new String[] {
-            "Search for something using the Faroo api - Usage: ##.<web|news|topics|trends|suggest> research"
+            "Search for something using the Faroo api - Usage: ##.<" + EnumUtils.joinValues(Source.class, "|") + "> research"
         });
         this.key = key;
     }
 
     @Override
     protected void exec(Context context, String primaryArgument, List<String> args) {
-        Source source = Source.get(primaryArgument);
-        if(source == null) {
-            source = Source.web;
-        }
+        Source source = EnumUtils.getIgnoreCase(Source.class, primaryArgument, Source.web);
         if(source == Source.topics) {
             context.error("This type is not supported yet (and will never be AHAHAHAHAHAHAHAH!)");
             return;
@@ -136,16 +134,7 @@ public class FarooCommand extends BaseCommand {
     }
 
     private enum Source {
-        web, news, topics, trends, suggest;
-
-        public static Source get(String primaryArgument) {
-            for(Source source : values()) {
-                if(source.name().equalsIgnoreCase(primaryArgument)) {
-                    return source;
-                }
-            }
-            return null;
-        }
+        web, news, topics, trends, suggest
     }
 
 }

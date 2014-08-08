@@ -104,9 +104,8 @@ public class IrcClient extends Client {
 
         // Message commands
         Map<String, String> data = new HashMap<>();
-        Set<String> specials = new HashSet<>();
-        manager.registerCommand(new DataCommand(data, specials));
-        manager.registerCommand(new MessageCommand(data, specials));
+        manager.registerCommand(new DataCommand(data));
+        manager.registerCommand(new MessageCommand(data));
 
         // JavaDoc commands
         //manager.registerCommand(new BukkitCommand(this));

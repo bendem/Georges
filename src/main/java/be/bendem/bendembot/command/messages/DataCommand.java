@@ -2,11 +2,11 @@ package be.bendem.bendembot.command.messages;
 
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.utils.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author bendem
@@ -14,12 +14,12 @@ import java.util.Set;
 public class DataCommand extends BaseCommand {
 
     private final Map<String, String> data;
-    private final Set<String> specials;
 
-    public DataCommand(Map<String, String> data, Set<String> specials) {
-        super("data", new String[]{"Set and get message data - Usage: data.<set|get> <key> [value]"}, true);
+    public DataCommand(Map<String, String> data) {
+        super("data", new String[]{
+            "Set and get message data - Usage: data.<set|get> <key> [value]"},
+        true);
         this.data = data;
-        this.specials = specials;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class DataCommand extends BaseCommand {
             return;
         }
         String key = args.get(0).toLowerCase();
-        Action action = Action.get(primaryArgument);
+        Action action = EnumUtils.getIgnoreCase(Action.class, primaryArgument);
         if(action == null) {
             context.error("Unknown action");
             return;
@@ -57,7 +57,7 @@ public class DataCommand extends BaseCommand {
     }
 
     private void set(String key, String value, Context context) {
-        if(specials.contains(key)) {
+        if(EnumUtils.getIgnoreCase(Data.class, key) != null) {
             context.error("Can't override special values");
             return;
         }
@@ -75,15 +75,7 @@ public class DataCommand extends BaseCommand {
     }
 
     private enum Action {
-        Get, Set, Delete;
-
-        public static Action get(String name) {
-            for(Action action : values()) {
-                if(action.name().equalsIgnoreCase(name)) {
-                    return action;
-                }
-            }
-            return null;
-        }
+        Get, Set, Delete
     }
+
 }

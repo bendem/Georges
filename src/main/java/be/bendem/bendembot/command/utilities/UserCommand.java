@@ -3,6 +3,7 @@ package be.bendem.bendembot.command.utilities;
 import be.bendem.bendembot.IrcClient;
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.utils.EnumUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class UserCommand extends BaseCommand {
 
     @Override
     protected void exec(Context context, String primaryArgument, List<String> args) {
-        Action action = Action.get(primaryArgument);
+        Action action = EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.Seen);
         if(action.isRestricted() && !admins.contains(context.getUser().getName())) {
             context.error("You don't have the right to use that command :/");
             return;
@@ -34,6 +35,7 @@ public class UserCommand extends BaseCommand {
             return;
         }
 
+        // TODO Implement stuff ;)
         String target = args.get(0);
         if(args.size() > 1 && args.get(1).equalsIgnoreCase("true")) {
 

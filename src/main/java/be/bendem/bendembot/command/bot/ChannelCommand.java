@@ -2,6 +2,7 @@ package be.bendem.bendembot.command.bot;
 
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.utils.EnumUtils;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Receiver;
 import fr.ribesg.alix.api.message.PartIrcPacket;
@@ -35,7 +36,7 @@ public class ChannelCommand extends BaseCommand {
             channel = context.getChannel().getName();
         }
 
-        switch(Action.get(primaryArgument)) {
+        switch(EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.List)) {
             case List:
                 list(context);
                 break;
@@ -130,15 +131,7 @@ public class ChannelCommand extends BaseCommand {
     }
 
     private enum Action {
-        List, Join, Leave, Users;
-
-        public static Action get(String name) {
-            for(Action action : values()) {
-                if(action.name().equalsIgnoreCase(name)) {
-                    return action;
-                }
-            }
-            return List;
-        }
+        List, Join, Leave, Users
     }
+
 }

@@ -14,7 +14,9 @@ public class QuitCommand extends BaseCommand {
     private final IrcClient bot;
 
     public QuitCommand(IrcClient bot) {
-        super("quit", new String[]{ "Kill the bot - Usage ##" }, true, "q");
+        super("quit", new String[]{
+            "Kill the bot - Usage ##"
+        }, true, "q");
         this.bot = bot;
     }
 

@@ -1,14 +1,14 @@
 package be.bendem.bendembot.command.messages;
 
-import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.utils.EnumUtils;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.enums.Codes;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,24 +22,13 @@ public class MessageCommand extends BaseCommand {
     private final Map<String, String> data;
     private final Map<String, String> messages;
 
-    public MessageCommand(Map<String, String> data, Set<String> specials) {
+    public MessageCommand(Map<String, String> data) {
         super("message", new String[] {
-            "Message manipulation - Usage: ##.<" + Action.joined('|') + "> <name> [value(s)]",
+            "Message manipulation - Usage: ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <name> [value(s)]",
             "Events can be used with data checks (but I don't like writing doc so guess them :/)"
         }, true, "mes");
         this.data = data;
         this.messages = new HashMap<>();
-
-        specials.add("usernick");
-        specials.add("userhost");
-        specials.add("username");
-        specials.add("servername");
-        specials.add("serverhost");
-        specials.add("channel");
-        specials.add("channelcount");
-        specials.add("channelopcount");
-        specials.add("channelvoicecount");
-        specials.add("channeltopic");
     }
 
     @Override
@@ -49,7 +38,7 @@ public class MessageCommand extends BaseCommand {
             return;
         }
         String name = args.get(0).toLowerCase();
-        Action action = Action.get(primaryArgument);
+        Action action = EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.Display);
         if(action == null) {
             context.error("Unknown action");
             return;
@@ -125,20 +114,7 @@ public class MessageCommand extends BaseCommand {
     }
 
     private enum Action {
-        Display, Get, Set, Delete, Event;
-
-        public static Action get(String name) {
-            for(Action action : values()) {
-                if(action.name().equalsIgnoreCase(name) || name == null && action == Display) {
-                    return action;
-                }
-            }
-            return null;
-        }
-
-        public static String joined(char c) {
-            return StringUtils.join(Arrays.stream(Action.values()).map(Action::name).iterator(), c);
-        }
+        Display, Get, Set, Delete, Event
     }
 
 }
