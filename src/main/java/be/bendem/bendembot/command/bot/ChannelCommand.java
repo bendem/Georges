@@ -3,6 +3,7 @@ package be.bendem.bendembot.command.bot;
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.EnumUtils;
+import be.bendem.bendembot.utils.NickUtils;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Receiver;
 import fr.ribesg.alix.api.message.PartIrcPacket;
@@ -19,7 +20,7 @@ public class ChannelCommand extends BaseCommand {
 
     public ChannelCommand() {
         super("channel", new String[] {
-            "Channel control - Usage: ##.<list|join|leave> [channel]"
+            "Channel control - Usage: ##.<" + EnumUtils.joinValues(Action.class, "|") + "> [channel] [more]"
         }, "c");
     }
 
@@ -47,7 +48,7 @@ public class ChannelCommand extends BaseCommand {
                 leave(context, channel);
                 break;
             case Users:
-                users(context, channel);
+                users(context, channel, args.size() > 1 && args.get(1).equalsIgnoreCase("more"));
                 break;
         }
     }
@@ -86,7 +87,7 @@ public class ChannelCommand extends BaseCommand {
         context.getServer().send(new PartIrcPacket(channelToLeave.getName()));
     }
 
-    private void users(Context context, String channel) {
+    private void users(Context context, String channel, boolean more) {
         if(channel == null) {
             context.error("No channel provided :(");
             return;
@@ -109,13 +110,23 @@ public class ChannelCommand extends BaseCommand {
             if(permA.ordinal() < permB.ordinal())
                 return -1;
             return user1.compareTo(user2);
-        }).iterator();
+        }).map(NickUtils::antiHightlight).iterator();
+
         // TODO Filter if too much users
-        context.message(
-            "There are " + users.size() + " users in " + channel
-            + " (" + channelToList.getOps().size() + " ops and " + channelToList.getVoiced().size() + " voiced): "
-            + StringUtils.join(sorted, ", ") + '.'
-        );
+        StringBuilder message = new StringBuilder("There are ")
+            .append(users.size())
+            .append(" users in ")
+            .append(channel)
+            .append(" (")
+            .append(channelToList.getOps().size())
+            .append(" ops and ")
+            .append(channelToList.getVoiced().size())
+            .append(" voiced)");
+
+        if(more) {
+            message.append(": ").append(StringUtils.join(sorted, ", "));
+        }
+        context.message(message.append('.').toString());
     }
 
     private enum Permission {
