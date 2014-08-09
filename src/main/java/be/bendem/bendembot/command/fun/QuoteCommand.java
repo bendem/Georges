@@ -50,8 +50,8 @@ public class QuoteCommand extends BaseCommand {
     private void loadThemFilez() {
         for(Type type : Type.values()) {
             try(BufferedReader reader = new BufferedReader(new InputStreamReader(ResourceUtils.getStream(type.getFilename()), Charset.forName("utf-8")))) {
-                List<String> collect = reader.lines().collect(Collectors.toList());
-                quotes.put(type, collect);
+                List<String> collected = reader.lines().collect(Collectors.toList());
+                quotes.put(type, collected);
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -60,7 +60,11 @@ public class QuoteCommand extends BaseCommand {
 
     @Override
     protected void exec(Context context, String primaryArgument, List<String> args) {
-        Type type = EnumUtils.getIgnoreCase(Type.class, primaryArgument, Type.ProgrammingExcuses);
+        Type type = EnumUtils.getIgnoreCase(Type.class, primaryArgument, Type.RandomEn);
+        if(type == null) {
+            context.error("Quote type not found, type `h.quotes to see them");
+            return;
+        }
         context.message(Codes.ITALIC + random(type));
     }
 
@@ -71,7 +75,8 @@ public class QuoteCommand extends BaseCommand {
 
     private enum Type {
         ProgrammingExcuses("devexcuses_en_quotes.txt", Language.English),
-        Philosophy("philo_fr_quotes.txt", Language.French),
+        RandomFr("philo_fr_quotes.txt", Language.French),
+        RandomEn("philo_en_quotes.txt", Language.English),
         Chuck("chuck_en_quotes.txt", Language.English);
 
         private final String   filename;
