@@ -1,5 +1,6 @@
 package be.bendem.bendembot;
 
+import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.ChannelCommand;
 import be.bendem.bendembot.commands.bot.NickCommand;
@@ -36,9 +37,10 @@ import java.util.Set;
  */
 public class IrcClient extends Client {
 
-    private final Configuration configuration;
+    private final Configuration   configuration;
     private final UserManager     userManager;
     private final Set<ChatFilter> filters;
+    private final MessageManager messageManager;
     private long lastSpoke = Time.now();
     private long lastJoke  = 0;
 
@@ -61,6 +63,7 @@ public class IrcClient extends Client {
         userManager = new UserManager(this);
         loadItMyself();
         getServers().forEach(Server::connect);
+        messageManager = new MessageManager();
     }
 
     @Override
@@ -99,9 +102,8 @@ public class IrcClient extends Client {
         register(new DiceCommand());
 
         // Message commands
-        Map<String, String> data = new HashMap<>();
-        register(new DataCommand(data));
-        register(new MessageCommand(data));
+        register(new DataCommand(messageManager));
+        register(new MessageCommand(messageManager));
 
         // JavaDoc commands
         //register(new BukkitCommand(this));

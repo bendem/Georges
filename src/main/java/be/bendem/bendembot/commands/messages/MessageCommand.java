@@ -1,6 +1,8 @@
 package be.bendem.bendembot.commands.messages;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.automatedmessages.Message;
+import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import fr.ribesg.alix.api.Channel;
@@ -18,16 +20,15 @@ import java.util.Map;
  */
 public class MessageCommand extends BaseCommand {
 
-    private final Map<String, String> data;
-    private final Map<String, String> messages;
 
-    public MessageCommand(Map<String, String> data) {
+    private final MessageManager manager;
+
+    public MessageCommand(MessageManager manager) {
         super("message", new String[] {
             "Message manipulation - Usage: ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <name> [value(s)]",
             "Events can be used with data checks (but I don't like writing doc so guess them :/)"
         }, true, "mes");
-        this.data = data;
-        this.messages = new HashMap<>();
+        this.manager = manager;
     }
 
     @Override
@@ -60,21 +61,22 @@ public class MessageCommand extends BaseCommand {
     }
 
     private void display(String name, Context context) {
-        if(!messages.containsKey(name)) {
+        Message message = manager.getMessage(name);
+        if(message == null) {
             context.error("Message not found");
             return;
         }
 
-        String message = messages.get(name);
+        String text = message.getText();
         for(Map.Entry<String, String> entry : data.entrySet()) {
-            message = message.replace('{' + entry.getKey() + '}', entry.getValue());
+            text = text.replace('{' + entry.getKey() + '}', entry.getValue());
         }
 
         Source user = context.getUser();
         Server server = context.getServer();
         Channel channel = context.getChannel();
 
-        message = message
+        text = text
             .replace("{usernick}", user.getName())
             .replace("{userhost}", user.getHostName())
             .replace("{username}", user.getUserName())
@@ -87,7 +89,7 @@ public class MessageCommand extends BaseCommand {
             .replace("{channeltopic}", channel.getTopic() == null ? Codes.ITALIC + "No topic" + Codes.ITALIC : channel.getTopic())
             ;
 
-        context.message(message);
+        context.message(text);
     }
 
     private void get(String name, Context context) {
