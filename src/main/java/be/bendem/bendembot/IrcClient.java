@@ -1,17 +1,17 @@
 package be.bendem.bendembot;
 
 import be.bendem.bendembot.command.BaseCommand;
-import be.bendem.bendembot.command.fun.QuoteCommand;
-import be.bendem.bendembot.command.utilities.UserCommand;
 import be.bendem.bendembot.command.bot.ChannelCommand;
 import be.bendem.bendembot.command.bot.NickCommand;
 import be.bendem.bendembot.command.bot.QuitCommand;
+import be.bendem.bendembot.command.fun.QuoteCommand;
 import be.bendem.bendembot.command.messages.DataCommand;
 import be.bendem.bendembot.command.messages.MessageCommand;
 import be.bendem.bendembot.command.utilities.FarooCommand;
 import be.bendem.bendembot.command.utilities.NickServCommand;
 import be.bendem.bendembot.command.utilities.PingCommand;
 import be.bendem.bendembot.command.utilities.TwitterCommand;
+import be.bendem.bendembot.command.utilities.UserCommand;
 import be.bendem.bendembot.configuration.Configuration;
 import be.bendem.bendembot.filters.ChatFilter;
 import be.bendem.bendembot.usermanagement.UserManager;
@@ -21,7 +21,6 @@ import fr.ribesg.alix.api.Client;
 import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
-import fr.ribesg.alix.api.bot.command.CommandManager;
 import fr.ribesg.alix.api.bot.util.PasteUtil;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
 
@@ -106,7 +105,7 @@ public class IrcClient extends Client {
         //register(new BukkitCommand(this));
         //register(new JavaCommand(this));
 
-
+        // Chat filters
         //filters.add(new SpamFilter(this));
         //filters.add(new MessageFilter(this));
     }

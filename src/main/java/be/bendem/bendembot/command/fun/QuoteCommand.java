@@ -4,30 +4,77 @@ import be.bendem.bendembot.Context;
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.Language;
+import be.bendem.bendembot.utils.ResourceUtils;
+import fr.ribesg.alix.api.Log;
+import fr.ribesg.alix.api.enums.Codes;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @author bendem
+ *
+ * Quotes were found at
+ * + http://www.programmerexcuses.com/
+ * + http://api.icndb.com/jokes/random/100
+ * TODO find more quotes
  */
 public class QuoteCommand extends BaseCommand {
 
+    private final Map<Type, List<String>> quotes;
+    private final Random random;
+
     public QuoteCommand() {
         super("quote", new String[] {
-            "Random quote - Usage ##.<" + EnumUtils.joinValues(Type.class, "|")
+            "Random quote - Usage ##.<" + EnumUtils.joinValues(Type.class, "|") + '>'
         });
+
+        quotes = new EnumMap<>(Type.class);
+        random = new Random();
+        loadThemFilez();
+        //debugThemQuotez();
+    }
+
+    private void debugThemQuotez() {
+        quotes.forEach((type, list) -> Log.debug(type.name() + ": " + StringUtils.join(list, "\n\t")));
+    }
+
+    private void loadThemFilez() {
+        for(Type type : Type.values()) {
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(ResourceUtils.getStream(type.getFilename()), Charset.forName("utf-8")))) {
+                List<String> collect = reader.lines().collect(Collectors.toList());
+                quotes.put(type, collect);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     protected void exec(Context context, String primaryArgument, List<String> args) {
-        Type type = EnumUtils.getIgnoreCase(Type.class, primaryArgument, Type.Programming);
+        Type type = EnumUtils.getIgnoreCase(Type.class, primaryArgument, Type.ProgrammingExcuses);
+        context.message(Codes.ITALIC + random(type));
+    }
+
+    private String random(Type type) {
+        List<String> strings = quotes.get(type);
+        return strings.get(random.nextInt(strings.size()));
     }
 
     private enum Type {
-        Programming("dev_quotes.txt", Language.English),
-        Philosophy("philo_quotes.txt", Language.French);
+        ProgrammingExcuses("devexcuses_en_quotes.txt", Language.English),
+        Philosophy("philo_fr_quotes.txt", Language.French),
+        Chuck("chuck_en_quotes.txt", Language.English);
 
-        private final String filename;
+        private final String   filename;
         private final Language language;
 
         private Type(String filename, Language language) {
