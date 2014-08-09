@@ -1,11 +1,11 @@
-package be.bendem.bendembot.command.messages;
+package be.bendem.bendembot.automatedmessages;
 
 import be.bendem.bendembot.Context;
 
 /**
  * @author bendem
  */
-public enum Data {
+public enum MessageData {
     UserNick((c) -> c.getUser().getName()),
     UserHost((c) -> c.getUser().getHostName()),
     UserName((c) -> c.getUser().getUserName()),
@@ -20,12 +20,16 @@ public enum Data {
 
     private final DataProvider<String> provider;
 
-    Data(DataProvider<String> provider) {
+    MessageData(DataProvider<String> provider) {
         this.provider = provider;
     }
 
     public String getData(Context context) {
         return provider.provide(context);
+    }
+
+    public interface DataProvider<T> {
+        public T provide(Context context);
     }
 
 }

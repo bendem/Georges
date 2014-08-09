@@ -1,5 +1,7 @@
 package be.bendem.bendembot.command.messages;
 
+import be.bendem.bendembot.automatedmessages.MessageData;
+import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.EnumUtils;
@@ -13,13 +15,13 @@ import java.util.Map;
  */
 public class DataCommand extends BaseCommand {
 
-    private final Map<String, String> data;
+    private final MessageManager manager;
 
-    public DataCommand(Map<String, String> data) {
+    public DataCommand(MessageManager manager) {
         super("data", new String[]{
             "Set and get message data - Usage: data.<set|get> <key> [value]"},
         true);
-        this.data = data;
+        this.manager = manager;
     }
 
     @Override
@@ -49,28 +51,28 @@ public class DataCommand extends BaseCommand {
     }
 
     private void get(String key, Context context) {
-        if(!data.containsKey(key)) {
+        if(manager.getData(key) == null) {
             context.error(key + " not found");
             return;
         }
-        context.message(key + ": " + data.get(key));
+        context.message(key + ": " + manager.getData(key));
     }
 
     private void set(String key, String value, Context context) {
-        if(EnumUtils.getIgnoreCase(Data.class, key) != null) {
+        if(EnumUtils.getIgnoreCase(MessageData.class, key) != null) {
             context.error("Can't override special values");
             return;
         }
-        data.put(key, value);
+        manager.setData(key, value);
         context.message(key + " value set");
     }
 
     private void delete(String key, Context context) {
-        if(!data.containsKey(key)) {
+        if(manager.getData(key) == null) {
             context.error(key + " not found");
             return;
         }
-        data.remove(key);
+        manager.removeData(key);
         context.message(key + " deleted");
     }
 
