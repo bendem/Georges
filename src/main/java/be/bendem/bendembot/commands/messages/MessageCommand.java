@@ -1,7 +1,7 @@
-package be.bendem.bendembot.command.messages;
+package be.bendem.bendembot.commands.messages;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;

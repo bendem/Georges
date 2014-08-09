@@ -1,7 +1,7 @@
-package be.bendem.bendembot.command.bot;
+package be.bendem.bendembot.commands.bot;
 
 import be.bendem.bendembot.IrcClient;
-import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.Context;
 
 import java.util.List;

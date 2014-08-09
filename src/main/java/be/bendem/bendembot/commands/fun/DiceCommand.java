@@ -1,7 +1,7 @@
-package be.bendem.bendembot.command.fun;
+package be.bendem.bendembot.commands.fun;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.commands.BaseCommand;
 import fr.ribesg.alix.api.enums.Codes;
 
 import java.util.List;

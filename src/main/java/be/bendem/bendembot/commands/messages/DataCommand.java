@@ -1,14 +1,13 @@
-package be.bendem.bendembot.command.messages;
+package be.bendem.bendembot.commands.messages;
 
 import be.bendem.bendembot.automatedmessages.MessageData;
 import be.bendem.bendembot.automatedmessages.MessageManager;
-import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author bendem

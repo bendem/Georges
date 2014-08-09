@@ -1,7 +1,7 @@
-package be.bendem.bendembot.command.fun;
+package be.bendem.bendembot.commands.fun;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.Language;
 import be.bendem.bendembot.utils.ResourceUtils;

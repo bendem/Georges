@@ -1,4 +1,4 @@
-package be.bendem.bendembot.command;
+package be.bendem.bendembot.commands;
 
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.GistStacks;

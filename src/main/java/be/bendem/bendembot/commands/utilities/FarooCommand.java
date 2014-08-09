@@ -1,6 +1,6 @@
-package be.bendem.bendembot.command.utilities;
+package be.bendem.bendembot.commands.utilities;
 
-import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.GistStacks;
