@@ -110,7 +110,7 @@ public class ChannelCommand extends BaseCommand {
             if(permA.ordinal() < permB.ordinal())
                 return -1;
             return user1.compareTo(user2);
-        }).map(NickUtils::antiHightlight).iterator();
+        }).map(NickUtils::antiHighlight).iterator();
 
         // TODO Filter if too much users
         StringBuilder message = new StringBuilder("There are ")
