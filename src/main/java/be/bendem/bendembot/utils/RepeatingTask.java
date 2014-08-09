@@ -46,7 +46,7 @@ public abstract class RepeatingTask implements Runnable {
      */
     public final void start() {
         if(running || finished) {
-            throw new IllegalStateException("Thread is already running or has run");
+            throw new IllegalStateException("Thread has already been started");
         }
         thread.start();
     }
