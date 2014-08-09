@@ -67,4 +67,12 @@ public abstract class BaseCommand extends Command {
 
     protected abstract void exec(Context context, String primaryArgument, List<String> args);
 
+    protected static int getInt(String s, int def) {
+        try {
+            return Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return def;
+        }
+    }
+
 }

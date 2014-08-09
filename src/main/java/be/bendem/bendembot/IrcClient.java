@@ -4,6 +4,7 @@ import be.bendem.bendembot.command.BaseCommand;
 import be.bendem.bendembot.command.bot.ChannelCommand;
 import be.bendem.bendembot.command.bot.NickCommand;
 import be.bendem.bendembot.command.bot.QuitCommand;
+import be.bendem.bendembot.command.fun.DiceCommand;
 import be.bendem.bendembot.command.fun.QuoteCommand;
 import be.bendem.bendembot.command.messages.DataCommand;
 import be.bendem.bendembot.command.messages.MessageCommand;
@@ -95,6 +96,7 @@ public class IrcClient extends Client {
 
         // Fun commands
         register(new QuoteCommand());
+        register(new DiceCommand());
 
         // Message commands
         Map<String, String> data = new HashMap<>();
