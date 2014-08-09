@@ -45,7 +45,7 @@ public class Context {
     }
 
     public void message(String message, boolean includeName) {
-        (channel == null ? user : channel).sendMessage((includeName ? user.getName() + ", " : "") + message);
+        (channel == null ? user : channel).sendMessage(Codes.RESET + (includeName ? user.getName() + ", " : "") + message);
     }
 
 }
