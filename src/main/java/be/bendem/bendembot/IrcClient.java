@@ -1,6 +1,7 @@
 package be.bendem.bendembot;
 
 import be.bendem.bendembot.command.BaseCommand;
+import be.bendem.bendembot.command.fun.QuoteCommand;
 import be.bendem.bendembot.command.utilities.UserCommand;
 import be.bendem.bendembot.command.bot.ChannelCommand;
 import be.bendem.bendembot.command.bot.NickCommand;
@@ -92,6 +93,9 @@ public class IrcClient extends Client {
             configuration.getTwitterApiKeySecret(),
             configuration.getTwitterAccessToken(),
             configuration.getTwitterAccessTokenSecret()));
+
+        // Fun commands
+        register(new QuoteCommand());
 
         // Message commands
         Map<String, String> data = new HashMap<>();
