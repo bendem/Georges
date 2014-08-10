@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class MessageCommand extends BaseCommand {
 
+    private static final String NOT_FOUND_MESSAGE = "'%s' message not found";
     private final MessageManager manager;
 
     public MessageCommand(MessageManager manager) {
@@ -50,7 +51,11 @@ public class MessageCommand extends BaseCommand {
                 set(name, StringUtils.join(args.listIterator(1), ' '), context);
                 break;
             case Event:
-                event(name, context, args.subList(1, args.size()));
+            case RemoveEvent:
+                event(name, context, args.subList(1, args.size()), action == Action.Event);
+                break;
+            case ClearEvents:
+                clearEvents(name, context);
                 break;
             case Delete:
                 delete(name, context);
@@ -59,19 +64,18 @@ public class MessageCommand extends BaseCommand {
     }
 
     private void display(String name, Context context) {
-        String message = manager.getTransformedMessage(name.toLowerCase(), context);
+        String message = manager.getTransformedMessage(name, context);
         if(message == null) {
-            context.error("Message not found");
+            context.error(String.format(NOT_FOUND_MESSAGE, name));
             return;
         }
-
         context.message(message);
     }
 
     private void get(String name, Context context) {
         Message message = manager.getMessage(name);
         if(message == null) {
-            context.error("Message not found");
+            context.error(String.format(NOT_FOUND_MESSAGE, name));
             return;
         }
         context.message(message.getText());
@@ -87,10 +91,10 @@ public class MessageCommand extends BaseCommand {
         context.message(name + " message set");
     }
 
-    private void event(String name, Context context, List<String> events) {
+    private void event(String name, Context context, List<String> events, boolean add) {
         Message message = manager.getMessage(name);
         if(message == null) {
-            context.error("Message not found");
+            context.error(String.format(NOT_FOUND_MESSAGE, name));
             return;
         }
         List<String> errored = new LinkedList<>();
@@ -99,28 +103,41 @@ public class MessageCommand extends BaseCommand {
             if(event == null) {
                 errored.add(eventName);
             } else {
-                message.addEvent(event);
+                if(add) {
+                    message.addEvent(event);
+                } else {
+                    message.removeEvent(event);
+                }
             }
         }
         if(errored.size() == 0) {
             context.message(events.size() + " events added.");
         } else {
-            context.error(StringUtils.join(errored, ", ") + " were not found.");
+            context.error(StringUtils.join(errored, ", ") + ' ' + (errored.size() > 1 ? "were" : "was") +  " not found.");
         }
+    }
+
+    private void clearEvents(String name, Context context) {
+        Message message = manager.getMessage(name);
+        if(message == null) {
+            context.error(String.format(NOT_FOUND_MESSAGE, name));
+            return;
+        }
+        context.message(message.clearEvents() + " events cleared.");
     }
 
     private void delete(String name, Context context) {
         Message message = manager.getMessage(name);
         if(message == null) {
-            context.error(name + " not found");
+            context.error(String.format(NOT_FOUND_MESSAGE, name));
             return;
         }
         manager.removeMessage(name);
-        context.message(name + " deleted");
+        context.message(name + " message deleted");
     }
 
     private enum Action {
-        Display, Get, Set, Event, Delete
+        Display, Get, Set, Event, RemoveEvent, ClearEvents, Delete
     }
 
 }

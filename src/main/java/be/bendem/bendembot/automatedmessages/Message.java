@@ -22,8 +22,8 @@ public class Message {
     public Message(String name, String text) {
         this.name = name.toLowerCase();
         this.text = text;
-        events = new HashSet<>();
-        messageData = new ArrayList<>();
+        this.events = new HashSet<>();
+        this.messageData = new ArrayList<>();
     }
 
     public String transform(Context context, Map<String, String> data) {
@@ -45,12 +45,22 @@ public class Message {
         return messageData;
     }
 
-    public Set<MessageEventHandler.Event> getEvents() {
-        return events;
+    public boolean shouldBeTriggered(MessageEventHandler.Event event) {
+        return events.contains(event);
     }
 
     public void addEvent(MessageEventHandler.Event event) {
         events.add(event);
+    }
+
+    public void removeEvent(MessageEventHandler.Event event) {
+        events.remove(event);
+    }
+
+    public int clearEvents() {
+        int size = events.size();
+        events.clear();
+        return size;
     }
 
     public String getText() {
