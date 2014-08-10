@@ -1,9 +1,11 @@
 package be.bendem.bendembot.automatedmessages;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.usermanagement.UserManager;
 import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.event.ChannelMessageEvent;
 import fr.ribesg.alix.api.event.EventHandler;
+import fr.ribesg.alix.api.event.EventHandlerPriority;
 import fr.ribesg.alix.api.event.UserJoinChannelEvent;
 import fr.ribesg.alix.api.event.UserPartChannelEvent;
 
@@ -12,37 +14,45 @@ import fr.ribesg.alix.api.event.UserPartChannelEvent;
  */
 public class MessageEventHandler {
 
-    private final MessageManager manager;
+    private final MessageManager messageManager;
+    private final UserManager userManager;
 
-    public MessageEventHandler(MessageManager manager) {
-        this.manager = manager;
+    public MessageEventHandler(MessageManager messageManager, UserManager userManager) {
+        this.messageManager = messageManager;
+        this.userManager = userManager;
         EventManager.register(this);
     }
 
-    @EventHandler
+    // Maybe the user manager should do that when adding a new user
+    @EventHandler(priority = EventHandlerPriority.HIGH)
     public void onUserJoin(UserJoinChannelEvent e) {
-        manager.spawnEvent(Event.UserJoinChannel, new Context(e.getChannel(), e.getUser()));
+        Context context = new Context(e.getChannel(), e.getUser());
+        if(!userManager.isKnown(e.getUser().getName())) {
+            messageManager.spawnEvent(Event.UserFirstJoin, context);
+        }
+        messageManager.spawnEvent(Event.UserJoin, context);
     }
 
     @EventHandler
     public void onUserPart(UserPartChannelEvent e) {
-        manager.spawnEvent(Event.UserLeaveChannel, new Context(e.getChannel(), e.getUser()));
+        messageManager.spawnEvent(Event.UserLeave, new Context(e.getChannel(), e.getUser()));
     }
 
     public void onUserMessage(ChannelMessageEvent e) {
-        manager.spawnEvent(Event.UserMessageChannel, new Context(e.getChannel(), e.getUser()));
+        messageManager.spawnEvent(Event.UserMessage, new Context(e.getChannel(), e.getUser()));
     }
 
     public enum Event {
-        UserJoinChannel,
-        UserLeaveChannel,
-        UserMessageChannel,
-        UserGetBanned,
-        UserGetKicked,
-        UserGetVoiced,
-        UserGetOpped,
-        UserGetUnbanned,
-        UserGetUnopped,
-        UserGetUnvoiced
+        UserFirstJoin,
+        UserJoin,
+        UserLeave,
+        UserMessage,
+        UserBanned,
+        UserKicked,
+        UserVoiced,
+        UserOpped,
+        UserUnbanned,
+        UserUnopped,
+        UserUnvoiced
     }
 }

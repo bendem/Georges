@@ -1,6 +1,7 @@
 package be.bendem.bendembot.automatedmessages;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.usermanagement.UserManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +15,8 @@ public class MessageManager {
     private final Map<String, String> data;
     private final Map<String, Message> messages;
 
-    public MessageManager() {
-        this.eventHandler = new MessageEventHandler(this);
+    public MessageManager(UserManager userManager) {
+        this.eventHandler = new MessageEventHandler(this, userManager);
         this.data = new HashMap<>();
         this.messages = new HashMap<>();
     }

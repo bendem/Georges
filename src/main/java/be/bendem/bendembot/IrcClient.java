@@ -60,8 +60,8 @@ public class IrcClient extends Client {
         }
 
         filters = new HashSet<>();
-        userManager = new UserManager(this);
-        messageManager = new MessageManager();
+        userManager = new UserManager();
+        messageManager = new MessageManager(userManager);
         loadItMyself();
         getServers().forEach(Server::connect);
     }
