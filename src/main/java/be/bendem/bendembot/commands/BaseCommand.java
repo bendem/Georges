@@ -55,7 +55,7 @@ public abstract class BaseCommand extends Command {
      */
     @Override
     public synchronized boolean exec(Server server, Channel channel, Source user, String primaryArgument, String[] args) {
-        Context context = new Context(server, channel, user);
+        Context context = new Context(channel, user);
         try {
             this.exec(context, primaryArgument, Arrays.asList(args));
         } catch(Exception e) {

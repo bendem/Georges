@@ -14,10 +14,10 @@ import java.util.Set;
  */
 public class Message {
 
-    private final String                    name;
-    private final Set<MessageManager.Event> events;
-    private final List<String>              messageData;
-    private       String                    text;
+    private final String                         name;
+    private final Set<MessageEventHandler.Event> events;
+    private final List<String>                   messageData;
+    private       String                         text;
 
     public Message(String name, String text) {
         this.name = name.toLowerCase();
@@ -45,8 +45,12 @@ public class Message {
         return messageData;
     }
 
-    public Set<MessageManager.Event> getEvents() {
+    public Set<MessageEventHandler.Event> getEvents() {
         return events;
+    }
+
+    public void addEvent(MessageEventHandler.Event event) {
+        events.add(event);
     }
 
     public String getText() {

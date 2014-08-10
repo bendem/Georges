@@ -18,8 +18,9 @@ public class DataCommand extends BaseCommand {
 
     public DataCommand(MessageManager manager) {
         super("data", new String[]{
-            "Set and get message data - Usage: data.<set|get> <key> [value]"},
-        true);
+            "Set and get message data - Usage: data.<set|get> <key> [value]",
+            "Data already taken are " + EnumUtils.joinValues(MessageData.class, ", ")
+        }, true);
         this.manager = manager;
     }
 

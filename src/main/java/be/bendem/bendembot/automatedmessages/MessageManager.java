@@ -10,10 +10,12 @@ import java.util.Map;
  */
 public class MessageManager {
 
+    private final MessageEventHandler eventHandler;
     private final Map<String, String> data;
     private final Map<String, Message> messages;
 
     public MessageManager() {
+        this.eventHandler = new MessageEventHandler(this);
         this.data = new HashMap<>();
         this.messages = new HashMap<>();
     }
@@ -50,16 +52,7 @@ public class MessageManager {
         messages.remove(key.toLowerCase());
     }
 
-    public enum Event {
-        UserJoinChannel,
-        UserLeaveChannel,
-        UserMessageChannel,
-        UserGetBanned,
-        UserGetKicked,
-        UserGetVoiced,
-        UserGetOpped,
-        UserGetUnbanned,
-        UserGetUnopped,
-        UserGetUnvoiced
+    public void spawnEvent(MessageEventHandler.Event event, Context context) {
     }
+
 }
