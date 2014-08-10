@@ -1,5 +1,7 @@
 package be.bendem.bendembot.automatedmessages;
 
+import be.bendem.bendembot.Context;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +10,8 @@ import java.util.Map;
  */
 public class MessageManager {
 
-    private final Map<String, String>     data;
-    private final Map<String, Message>     messages;
+    private final Map<String, String> data;
+    private final Map<String, Message> messages;
 
     public MessageManager() {
         this.data = new HashMap<>();
@@ -17,19 +19,27 @@ public class MessageManager {
     }
 
     public String getData(String key) {
-        return data.get(key);
+        return data.get(key.toLowerCase());
     }
 
     public void setData(String key, String value) {
-        data.put(key, value);
+        data.put(key.toLowerCase(), value);
     }
 
     public void removeData(String key) {
-        data.remove(key);
+        data.remove(key.toLowerCase());
     }
 
     public Message getMessage(String key) {
-        return messages.get(key);
+        return messages.get(key.toLowerCase());
+    }
+
+    public String getTransformedMessage(String key, Context context) {
+        Message message = getMessage(key.toLowerCase());
+        if(message == null) {
+            return null;
+        }
+        return message.transform(context, data);
     }
 
     public void setMessage(Message message) {
@@ -37,7 +47,7 @@ public class MessageManager {
     }
 
     public void removeMessage(String key) {
-        messages.remove(key);
+        messages.remove(key.toLowerCase());
     }
 
     public enum Event {

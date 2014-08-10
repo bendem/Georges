@@ -1,6 +1,7 @@
 package be.bendem.bendembot.automatedmessages;
 
 import be.bendem.bendembot.Context;
+import fr.ribesg.alix.api.enums.Codes;
 
 /**
  * @author bendem
@@ -15,7 +16,7 @@ public enum MessageData {
     ChannelCount((c) -> String.valueOf(c.getChannel().getUsers().size())),
     ChannelOpCount((c) -> String.valueOf(c.getChannel().getOps().size())),
     ChannelVoiceCount((c) -> String.valueOf(c.getChannel().getVoiced().size())),
-    ChannelTopic((c) -> c.getChannel().getTopic()),
+    ChannelTopic((c) -> c.getChannel().getTopic() == null ? Codes.ITALIC + "No topic" + Codes.ITALIC : c.getChannel().getTopic()),
     ;
 
     private final DataProvider<String> provider;

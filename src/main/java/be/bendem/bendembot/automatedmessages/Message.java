@@ -1,8 +1,12 @@
 package be.bendem.bendembot.automatedmessages;
 
+import be.bendem.bendembot.Context;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -20,6 +24,17 @@ public class Message {
         this.text = text;
         events = new HashSet<>();
         messageData = new ArrayList<>();
+    }
+
+    public String transform(Context context, Map<String, String> data) {
+        String text = this.text;
+        for(Map.Entry<String, String> entry : data.entrySet()) {
+            text = StringUtils.replace(text, '{' + entry.getKey() + '}', entry.getValue());
+        }
+        for(MessageData messageData : MessageData.values()) {
+            text = StringUtils.replace(text, '{' + messageData.name().toLowerCase() + '}', messageData.getData(context));
+        }
+        return text;
     }
 
     public String getName() {
