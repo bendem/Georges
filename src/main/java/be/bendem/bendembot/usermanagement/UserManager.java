@@ -5,6 +5,7 @@ import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Source;
+import fr.ribesg.alix.api.event.ClientJoinChannelEvent;
 import fr.ribesg.alix.api.event.EventHandler;
 import fr.ribesg.alix.api.event.UserJoinChannelEvent;
 import fr.ribesg.alix.api.message.ModeIrcPacket;
@@ -29,11 +30,23 @@ public class UserManager {
     }
 
     // TODO Move to another class maybe with some other hooks
-    @EventHandler
+    @EventHandler(ignoreConsumed = false)
     public void onJoin(UserJoinChannelEvent e) {
         if(!users.containsKey(e.getUser().getName())) {
             Log.info("Adding " + e.getUser().getName() + "!" + e.getUser().getUserName() + " to known list");
             users.put(e.getUser().getName(), new User(e.getUser()));
+        }
+    }
+
+    @EventHandler(ignoreConsumed = false)
+    public void onClientJoin(ClientJoinChannelEvent e) {
+        // TODO Need user mode before going further
+        e.getChannel().
+        for(String nick : e.getChannel().getUserNicknames()) {
+            if(!users.containsKey(nick)) {
+                Log.info("Adding " + nick + "!" + e.getUser().getUserName() + " to known list");
+                users.put(e.getUser().getName(), new User(e.getUser()));
+            }
         }
     }
 

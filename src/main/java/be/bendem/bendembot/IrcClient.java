@@ -27,9 +27,7 @@ import fr.ribesg.alix.api.bot.util.PasteUtil;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**

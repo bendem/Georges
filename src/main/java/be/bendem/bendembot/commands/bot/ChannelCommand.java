@@ -1,7 +1,7 @@
 package be.bendem.bendembot.commands.bot;
 
-import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.NickUtils;
 import fr.ribesg.alix.api.Channel;

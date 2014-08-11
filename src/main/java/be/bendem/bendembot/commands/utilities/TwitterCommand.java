@@ -1,7 +1,7 @@
 package be.bendem.bendembot.commands.utilities;
 
-import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.commands.BaseCommand;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

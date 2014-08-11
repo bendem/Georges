@@ -1,7 +1,7 @@
 package be.bendem.bendembot.commands.bot;
 
-import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.commands.BaseCommand;
 import fr.ribesg.alix.api.message.NickIrcPacket;
 
 import java.util.List;
