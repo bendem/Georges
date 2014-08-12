@@ -10,6 +10,7 @@ import be.bendem.bendembot.commands.fun.QuoteCommand;
 import be.bendem.bendembot.commands.messages.DataCommand;
 import be.bendem.bendembot.commands.messages.MessageCommand;
 import be.bendem.bendembot.commands.utilities.FarooCommand;
+import be.bendem.bendembot.commands.utilities.NashornCommand;
 import be.bendem.bendembot.commands.utilities.NickServCommand;
 import be.bendem.bendembot.commands.utilities.PingCommand;
 import be.bendem.bendembot.commands.utilities.TwitterCommand;
