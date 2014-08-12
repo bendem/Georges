@@ -26,32 +26,16 @@ public class UserManager {
     public UserManager() {
         this.users = new ConcurrentHashMap<>();
 
-        EventManager.register(this);
-    }
-
-    // TODO Move to another class maybe with some other hooks
-    @EventHandler(ignoreConsumed = false)
-    public void onJoin(UserJoinChannelEvent e) {
-        if(!users.containsKey(e.getUser().getName())) {
-            Log.info("Adding " + e.getUser().getName() + "!" + e.getUser().getUserName() + " to known list");
-            users.put(e.getUser().getName(), new User(e.getUser()));
-        }
-    }
-
-    @EventHandler(ignoreConsumed = false)
-    public void onClientJoin(ClientJoinChannelEvent e) {
-        // TODO Need user mode before going further
-        e.getChannel().
-        for(String nick : e.getChannel().getUserNicknames()) {
-            if(!users.containsKey(nick)) {
-                Log.info("Adding " + nick + "!" + e.getUser().getUserName() + " to known list");
-                users.put(e.getUser().getName(), new User(e.getUser()));
-            }
-        }
+        EventManager.register(new UserManagerEvents(this));
     }
 
     public boolean isKnown(String nick) {
-        return users.containsKey(nick);
+        return users.containsKey(nick)
+            || users.values().stream().filter(u -> u.getKnownNicks().contains(nick)).count() != 0;
+    }
+
+    public Map<String, User> getUsers() {
+        return users;
     }
 
     public void kick(Channel channel, Source user, String message) {

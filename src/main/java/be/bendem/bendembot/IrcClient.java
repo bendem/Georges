@@ -81,12 +81,12 @@ public class IrcClient extends Client {
 
         // Control commands
         register(new ChannelCommand());
-        register(new QuitCommand(this));
         register(new NickCommand());
+        register(new QuitCommand(this));
 
         // Utility commands
-        register(new UserCommand(this));
         register(new FarooCommand(configuration.getFarooKey()));
+        register(new NashornCommand());
         register(new NickServCommand(this));
         register(new PingCommand());
         register(new TwitterCommand(
@@ -94,10 +94,11 @@ public class IrcClient extends Client {
             configuration.getTwitterApiKeySecret(),
             configuration.getTwitterAccessToken(),
             configuration.getTwitterAccessTokenSecret()));
+        register(new UserCommand(this));
 
         // Fun commands
-        register(new QuoteCommand());
         register(new DiceCommand());
+        register(new QuoteCommand());
 
         // Message commands
         register(new DataCommand(messageManager));
@@ -121,22 +122,6 @@ public class IrcClient extends Client {
             Log.debug("Pass: '" + configuration.getEsperPass() + '\'');
             server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY " + configuration.getEsperPass()));
         }
-    }
-
-    public boolean speak(Channel channel, String...messages) {
-        return speak(false, channel, messages);
-    }
-
-    public boolean speak(boolean force, Channel channel, String...messages) {
-        if(messages == null || messages.length < 1) {
-            return false;
-        }
-        if(!force && Time.since(getLastSpoke()) < 10_000) {
-            return false;
-        }
-        channel.sendMessage(messages);
-        resetLastSpoke();
-        return true;
     }
 
     public long getLastSpoke() {

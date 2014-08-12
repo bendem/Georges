@@ -47,6 +47,7 @@ public class Message {
 
     public boolean shouldBeTriggered(MessageEventHandler.Event event) {
         return events.contains(event);
+        // TODO Check for context data
     }
 
     public void addEvent(MessageEventHandler.Event event) {

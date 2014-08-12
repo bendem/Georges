@@ -55,8 +55,8 @@ public class MessageManager {
 
     public void spawnEvent(MessageEventHandler.Event event, Context context) {
         messages.values().stream()
-                .filter(message -> message.shouldBeTriggered(event))
-                .forEach(message -> context.message(message.transform(context, data), false));
+            .filter(message -> message.shouldBeTriggered(event))
+            .forEach(message -> context.message(message.transform(context, data), false));
     }
 
 }

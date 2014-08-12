@@ -5,7 +5,9 @@ import fr.ribesg.alix.api.Source;
 import org.apache.commons.lang3.Validate;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO This class contains informations about users (known nicks, userhost, username, reputation, etc)
@@ -19,6 +21,7 @@ public class User {
     private final String            hostName;
     // Contains <channel, mode>
     private final Map<String, Mode> channels;
+    private final Set<String>       knownNicks;
 
     public User(Source user) {
         Validate.isTrue(user.isUser());
@@ -27,14 +30,22 @@ public class User {
         hostName = user.getHostName();
         channels = new HashMap<>();
         for(Channel channel : user.getServer().getChannels()) {
-            for(String nick : channel.getUserNicknames()) {
-                if(user.getName().equals(nick)) {
-                    channels.put(channel.getName(), new Mode(channel.getName(), null));
-                }
-            }
-
+            channel.getUserNicknames().stream()
+                .filter(nick -> user.getName().equals(nick))
+                .forEach(nick -> channels.put(channel.getName(), new Mode(channel.getName(), null)));
         }
+        knownNicks = new HashSet<>();
 
+        // TODO NickServ check
+    }
+
+    // TODO Remove that temporary thing
+    public User(String currentNick) {
+        this.hostName = null;
+        this.userName = null;
+        this.currentNick = currentNick;
+        this.channels = new HashMap<>();
+        this.knownNicks = new HashSet<>();
     }
 
     public String getCurrentNick() {
@@ -47,6 +58,10 @@ public class User {
 
     public String getHostName() {
         return hostName;
+    }
+
+    public Set<String> getKnownNicks() {
+        return knownNicks;
     }
 
 }
