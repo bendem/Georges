@@ -16,6 +16,8 @@ import java.util.Map;
  */
 public class GistStacks {
 
+    private static final boolean ACTIVE = false;
+
     private static final Map<String, String> HEADERS;
     static {
         Map<String, String> headers = new HashMap<>();
@@ -25,6 +27,9 @@ public class GistStacks {
     }
 
     public static String gist(Throwable throwable) {
+        if(!ACTIVE) {
+            return "!!Gist system no active!!";
+        }
         JsonObject json = new JsonObject();
         json.addProperty("description", "Georges stacktrace: " + throwable.getMessage());
         json.addProperty("public", false);
