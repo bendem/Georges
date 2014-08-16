@@ -3,9 +3,7 @@ package be.bendem.bendembot.automatedmessages;
 import be.bendem.bendembot.Context;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,14 +14,18 @@ public class Message {
 
     private final String                         name;
     private final Set<MessageEventHandler.Event> events;
-    private final List<String>                   messageData;
+    private       String                         channel;
     private       String                         text;
 
+
     public Message(String name, String text) {
+        this(name, text, null);
+    }
+    public Message(String name, String text, String channel) {
         this.name = name.toLowerCase();
         this.text = text;
+        this.channel = channel;
         this.events = new HashSet<>();
-        this.messageData = new ArrayList<>();
     }
 
     public String transform(Context context, Map<String, String> data) {
@@ -41,13 +43,8 @@ public class Message {
         return name;
     }
 
-    public List<String> getMessageData() {
-        return messageData;
-    }
-
-    public boolean shouldBeTriggered(MessageEventHandler.Event event) {
-        return events.contains(event);
-        // TODO Check for context data
+    public boolean shouldBeTriggered(MessageEventHandler.Event event, String channel) {
+        return (isGlobal() || this.channel.equalsIgnoreCase(channel)) && events.contains(event);
     }
 
     public void addEvent(MessageEventHandler.Event event) {
@@ -70,6 +67,18 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public boolean isGlobal() {
+        return channel == null;
     }
 
 }

@@ -50,6 +50,9 @@ public class MessageCommand extends BaseCommand {
             case Set:
                 set(name, StringUtils.join(args.listIterator(1), ' '), context);
                 break;
+            case Channel:
+                channel(name, args.subList(1, args.size()), context);
+                break;
             case Event:
             case RemoveEvent:
                 event(name, context, args.subList(1, args.size()), action == Action.Event);
@@ -89,6 +92,22 @@ public class MessageCommand extends BaseCommand {
             message.setText(value);
         }
         context.message(name + " message set");
+    }
+
+    private void channel(String name, List<String> args, Context context) {
+        Message message = manager.getMessage(name);
+        if(message == null) {
+            context.error(String.format(NOT_FOUND_MESSAGE, name));
+            return;
+        }
+        if(args.size() < 1) {
+            message.setChannel(null);
+            context.message("Channel set to global");
+        } else {
+            String channel = args.get(0).startsWith("#") ? args.get(0) : '#' + args.get(0);
+            message.setChannel(channel);
+            context.message("Channel set to " + channel);
+        }
     }
 
     private void event(String name, Context context, List<String> events, boolean add) {
@@ -137,7 +156,7 @@ public class MessageCommand extends BaseCommand {
     }
 
     private enum Action {
-        Display, Get, Set, Event, RemoveEvent, ClearEvents, Delete
+        Display, Get, Set, Event, Channel, RemoveEvent, ClearEvents, Delete
     }
 
 }

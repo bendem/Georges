@@ -11,12 +11,11 @@ import java.util.Map;
  */
 public class MessageManager {
 
-    private final MessageEventHandler eventHandler;
     private final Map<String, String> data;
     private final Map<String, Message> messages;
 
     public MessageManager(UserManager userManager) {
-        this.eventHandler = new MessageEventHandler(this, userManager);
+        new MessageEventHandler(this, userManager);
         this.data = new HashMap<>();
         this.messages = new HashMap<>();
     }
@@ -55,7 +54,7 @@ public class MessageManager {
 
     public void spawnEvent(MessageEventHandler.Event event, Context context) {
         messages.values().stream()
-            .filter(message -> message.shouldBeTriggered(event))
+            .filter(message -> message.shouldBeTriggered(event, context.getChannel().getName()))
             .forEach(message -> context.message(message.transform(context, data), false));
     }
 
