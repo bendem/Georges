@@ -5,6 +5,7 @@ import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.ChannelCommand;
 import be.bendem.bendembot.commands.bot.NickCommand;
 import be.bendem.bendembot.commands.bot.QuitCommand;
+import be.bendem.bendembot.commands.bot.TellCommand;
 import be.bendem.bendembot.commands.fun.DiceCommand;
 import be.bendem.bendembot.commands.fun.QuoteCommand;
 import be.bendem.bendembot.commands.messages.DataCommand;
@@ -84,6 +85,7 @@ public class IrcClient extends Client {
         register(new ChannelCommand());
         register(new NickCommand());
         register(new QuitCommand(this));
+        register(new TellCommand());
 
         // Utility commands
         register(new FarooCommand(configuration.getFarooKey()));
