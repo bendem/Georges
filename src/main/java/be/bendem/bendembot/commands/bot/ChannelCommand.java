@@ -37,7 +37,16 @@ public class ChannelCommand extends BaseCommand {
             channel = context.getChannel().getName();
         }
 
-        switch(EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.List)) {
+        Action action = EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.List);
+        if(action == Action.Join || action == Action.Leave) {
+            // TODO Maybe a better system to prevent the bot from going in the wild / leaving not wanted channels
+            if(context.getUser().getName().equals("bendem")) {
+                context.error("You need to be a channel operator to do that");
+                return;
+            }
+        }
+
+        switch(action) {
             case List:
                 list(context);
                 break;
