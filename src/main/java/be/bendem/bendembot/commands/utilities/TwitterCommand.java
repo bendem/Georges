@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.ribesg.alix.api.Log;
+import fr.ribesg.alix.api.enums.Codes;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.OAuthRequest;
@@ -65,7 +66,7 @@ public class TwitterCommand extends BaseCommand {
             return;
         }
 
-        String message = tweet.get("text").getAsString() + " by @" + tweet.getAsJsonObject("user").get("screen_name").getAsString();
+        String message = tweet.get("text").getAsString() + " by @" + Codes.BOLD + tweet.getAsJsonObject("user").get("screen_name").getAsString();
         context.message(message);
     }
 

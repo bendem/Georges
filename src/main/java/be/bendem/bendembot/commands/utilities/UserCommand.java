@@ -17,7 +17,7 @@ public class UserCommand extends BaseCommand {
 
     public UserCommand(IrcClient ircClient) {
         super("user", new String[]{
-            "User management command - Usage ##.<{actions}> <target> [global]"
+            "User management command - Usage ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <target> [global]"
         }, "u");
         admins = ircClient.getAdmins();
     }
