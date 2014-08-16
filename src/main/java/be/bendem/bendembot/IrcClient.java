@@ -45,7 +45,7 @@ public class IrcClient extends Client {
 
     public IrcClient(String name) {
         super(name);
-        Log.debug("Starting up...");
+        Log.info("Starting up...");
 
         PasteUtil.setMode(null);
 
@@ -120,7 +120,6 @@ public class IrcClient extends Client {
 
     public void auth(final Server server) {
         if(server.getName().equals("Esper")) {
-            Log.debug("Pass: '" + configuration.getEsperPass() + '\'');
             server.send(new PrivMsgIrcPacket("NickServ", "IDENTIFY " + configuration.getEsperPass()));
         }
     }
