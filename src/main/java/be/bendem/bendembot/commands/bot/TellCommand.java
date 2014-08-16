@@ -28,7 +28,9 @@ public class TellCommand extends BaseCommand {
         String text = String.join(" ", args.subList(1, args.size()));
         PrivMsgIrcPacket packet = new PrivMsgIrcPacket(target, text);
         context.getServer().send(packet);
-        context.message("Message sent to " + Codes.BOLD + target);
+        if(context.getChannel() == null) {
+            context.message("Message sent to " + Codes.BOLD + target);
+        }
     }
 
 }

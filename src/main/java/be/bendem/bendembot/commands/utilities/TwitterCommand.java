@@ -2,6 +2,7 @@ package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.commands.BaseCommand;
+import be.bendem.bendembot.utils.NickUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -67,7 +68,7 @@ public class TwitterCommand extends BaseCommand {
         }
 
         String message = tweet.get("text").getAsString() + " by @" + Codes.BOLD + tweet.getAsJsonObject("user").get("screen_name").getAsString();
-        context.message(message);
+        context.message(NickUtils.antiHighlight(message));
     }
 
     private JsonElement get(String route, Map<String, String> params) {
