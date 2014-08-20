@@ -15,7 +15,7 @@ public class Context {
     private final Source  user;
 
     public Context(Channel channel, Source user) {
-        this.server = channel.getServer();
+        this.server = user.getServer();
         this.channel = channel;
         this.user = user;
     }
