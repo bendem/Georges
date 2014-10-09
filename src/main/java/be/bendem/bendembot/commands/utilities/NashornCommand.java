@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.security.Permission;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
@@ -61,19 +62,33 @@ public class NashornCommand extends BaseCommand {
         // One engine eval at a time, this way, Nashorn.output is safe from a concurrency POV
         synchronized(this) {
             ScriptEngine engine = prepareNewEngine();
+            Runnable task = () -> {
+                try {
+                    Object eval = engine.eval(script);
+                    if(eval != null) {
+                        context.message(eval.toString());
+                    }
+                    if(OutputHandler.output.size() != 0) {
+                        context.message("STDOUT: " + String.join(" | ", OutputHandler.output));
+                    }
+                } catch(ScriptException e) {
+                    Log.error("Error while executing nashorn script", e);
+                    context.error(e.getMessage().split("\r?\n")[0]);
+                } finally {
+                    OutputHandler.output.clear();
+                }
+            };
+            Thread thread = new Thread(task);
+            thread.start();
             try {
-                Object eval = engine.eval(script);
-                if(eval != null) {
-                    context.message(eval.toString());
-                }
-                if(OutputHandler.output.size() != 0) {
-                    context.message("STDOUT: " + String.join(" | ", OutputHandler.output));
-                }
-            } catch(ScriptException e) {
-                Log.error("Error while executing nashorn script", e);
-                context.error(e.getMessage().split("\r?\n")[0]);
-            } finally {
-                OutputHandler.output.clear();
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+            // force them to quit by interrupting
+            if(thread.isAlive()) {
+                thread.stop();
+                context.error("Execution too long");
             }
         }
     }
