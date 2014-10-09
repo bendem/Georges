@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class NickServ {
 
-    private static final Pattern ACC_PARSER = Pattern.compile("^(?<nick>[^\\s]*)\\s+->\\s+(?<account>[^\\s]*)\\s+ACC\\s+(?<code>[0-3])(\\s+\\((?<precision>[^\\)]+)\\))?$");
+    private static final Pattern ACC_PARSER = Pattern.compile("^(?<nick>[^\\s]*)\\s+->\\s+(?<account>[^\\s]*)\\s+ACC\\s+(?<code>[0-3])(?:\\s+(?:\\((?<precision>[^)]+)\\)|(?<eid>[A-Z]+)))$");
 
     public static Response check(Server server, String nick) throws InterruptedException {
         final Object lock = new Object();
@@ -65,6 +65,7 @@ public class NickServ {
                 matcher.group("nick"),
                 matcher.group("account"),
                 Status.fromInt(Integer.parseInt(matcher.group("code"))),
+                matcher.group("eid"),
                 matcher.group("precision")
             );
             e.consume();
@@ -105,17 +106,26 @@ public class NickServ {
         private final String nick;
         private final String account;
         private final Status status;
-        private final String precision;
+        private final String eid;
 
-        public Response(String nick, String account, Status status, String precision) {
+        public Response(String nick, String account, Status status, String eid, String precision) {
+            Validate.notNull(nick, "nick can't be null");
+            Validate.notNull(account, "account can't be null");
+            Validate.notNull(status, "status can't be null");
+            Validate.isTrue((eid == null) != (precision == null), "either eid or precision should be null, not none, not the two of them");
+
+            Log.debug("NickServ answer");
+            Log.debug(eid);
+            Log.debug(precision);
+
             this.nick = nick;
             this.account = account;
             if(status == Status.UserOffline) {
-                this.status = "offline".equals(precision) ? status : Status.UserUnrecognized;
+                this.status = "offline".equalsIgnoreCase(precision) ? status : Status.UserUnrecognized;
             } else {
                 this.status = status;
             }
-            this.precision = precision;
+            this.eid = eid;
         }
 
         public String getNick() {
@@ -130,8 +140,8 @@ public class NickServ {
             return status;
         }
 
-        public String getPrecision() {
-            return precision;
+        public String getEid() {
+            return eid;
         }
 
         @Override
@@ -140,7 +150,7 @@ public class NickServ {
                     "nick='" + nick + '\'' +
                     ", account='" + account + '\'' +
                     ", status=" + status +
-                    ", precision='" + precision + '\'' +
+                    ", eid='" + eid + '\'' +
                     '}';
         }
 
