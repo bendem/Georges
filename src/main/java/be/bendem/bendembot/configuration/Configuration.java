@@ -1,6 +1,6 @@
 package be.bendem.bendembot.configuration;
 
-import be.bendem.bendembot.IrcClient;
+import be.bendem.bendembot.Georges;
 import fr.ribesg.alix.api.bot.config.AlixConfiguration;
 import fr.ribesg.alix.api.bot.util.configuration.YamlDocument;
 
@@ -24,7 +24,7 @@ public class Configuration extends AlixConfiguration {
     private String twitterAccessToken;
     private String twitterAccessTokenSecret;
 
-    public Configuration(IrcClient bot) {
+    public Configuration(Georges bot) {
         super("georges.yml");
         this.farooKey = DEFAULT;
         this.esperPass = DEFAULT;

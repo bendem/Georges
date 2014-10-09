@@ -1,7 +1,7 @@
 package be.bendem.bendembot.commands.bot;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.IrcClient;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class QuitCommand extends BaseCommand {
 
-    private final IrcClient bot;
+    private final Georges bot;
 
-    public QuitCommand(IrcClient bot) {
+    public QuitCommand(Georges bot) {
         super("quit", new String[]{
             "Kill the bot - Usage ##"
         }, true, "q");

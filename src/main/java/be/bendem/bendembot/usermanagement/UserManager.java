@@ -3,11 +3,7 @@ package be.bendem.bendembot.usermanagement;
 import be.bendem.bendembot.custompackets.KickIrcPacket;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.EventManager;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Source;
-import fr.ribesg.alix.api.event.ClientJoinChannelEvent;
-import fr.ribesg.alix.api.event.EventHandler;
-import fr.ribesg.alix.api.event.UserJoinChannelEvent;
 import fr.ribesg.alix.api.message.ModeIrcPacket;
 import org.apache.commons.lang3.Validate;
 

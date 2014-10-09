@@ -1,7 +1,7 @@
 package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.IrcClient;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 
@@ -15,11 +15,11 @@ public class UserCommand extends BaseCommand {
 
     private final Set<String> admins;
 
-    public UserCommand(IrcClient ircClient) {
+    public UserCommand(Georges georges) {
         super("user", new String[]{
             "User management command - Usage ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <target> [global]"
         }, "u");
-        admins = ircClient.getAdmins();
+        admins = georges.getAdmins();
     }
 
     @Override

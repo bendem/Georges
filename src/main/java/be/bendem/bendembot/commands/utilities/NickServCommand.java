@@ -1,7 +1,7 @@
 package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.IrcClient;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.NickServ;
 import be.bendem.bendembot.utils.NickUtils;
@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class NickServCommand extends BaseCommand {
 
-    private final IrcClient bot;
+    private final Georges bot;
 
-    public NickServCommand(IrcClient bot) {
+    public NickServCommand(Georges bot) {
         super("nickserv", new String[] {
             "Check if a user if authenticated to NickServ - Usage ## [name]"
         }, "ns");

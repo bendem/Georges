@@ -17,10 +17,8 @@ import be.bendem.bendembot.commands.utilities.PingCommand;
 import be.bendem.bendembot.commands.utilities.TwitterCommand;
 import be.bendem.bendembot.commands.utilities.UserCommand;
 import be.bendem.bendembot.configuration.Configuration;
-import be.bendem.bendembot.filters.ChatFilter;
 import be.bendem.bendembot.usermanagement.UserManager;
 import be.bendem.bendembot.utils.Time;
-import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Client;
 import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.Log;
@@ -29,22 +27,20 @@ import fr.ribesg.alix.api.bot.util.PasteUtil;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @author bendem
  */
-public class IrcClient extends Client {
+public class Georges extends Client {
 
     private final Configuration   configuration;
     private final UserManager     userManager;
-    private final Set<ChatFilter> filters;
     private final MessageManager messageManager;
     private long lastSpoke = Time.now();
     private long lastJoke  = 0;
 
-    public IrcClient(String name) {
+    public Georges(String name) {
         super(name);
         Log.info("Starting up...");
 
@@ -59,7 +55,6 @@ public class IrcClient extends Client {
             }
         }
 
-        filters = new HashSet<>();
         userManager = new UserManager();
         messageManager = new MessageManager(userManager);
         loadItMyself();
@@ -79,7 +74,7 @@ public class IrcClient extends Client {
         EventManager.register(new BotHandler(this));
 
         createCommandManager("`", configuration.getAdmins())
-                .setUnknownCommandMessage(null);
+            .setUnknownCommandMessage(null);
 
         // Control commands
         register(new ChannelCommand());
@@ -106,14 +101,6 @@ public class IrcClient extends Client {
         // Message commands
         register(new DataCommand(messageManager));
         register(new MessageCommand(messageManager));
-
-        // JavaDoc commands
-        //register(new BukkitCommand(this));
-        //register(new JavaCommand(this));
-
-        // Chat filters
-        //filters.add(new SpamFilter(this));
-        //filters.add(new MessageFilter(this));
     }
 
     private void register(BaseCommand command) {
@@ -169,16 +156,19 @@ public class IrcClient extends Client {
         System.exit(0);
     }
 
-    public Set<ChatFilter> getFilters() {
-        return filters;
-    }
-
     public long getLastJoke() {
         return lastJoke;
     }
 
     public void setLastJoke(long lastJoke) {
         this.lastJoke = lastJoke;
+    }
+
+    public static void main(final String args[]) {
+        Georges georges = new Georges("Georges");
+
+        while(!System.console().readLine().equalsIgnoreCase("stop"));
+        georges.kill();
     }
 
 }

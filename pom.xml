@@ -60,7 +60,7 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                         <manifestEntries>
-                            <Main-Class>${project.groupId}.${project.artifactId}</Main-Class>
+                            <Main-Class>${project.groupId}.Georges</Main-Class>
                             <Implementation-Title>${project.artifactId}</Implementation-Title>
                             <Implementation-Vendor>${project.artifactId} Team</Implementation-Vendor>
                             <Sealed>true</Sealed>
