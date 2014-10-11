@@ -45,6 +45,10 @@ public class Context {
     }
 
     public void message(String message, boolean includeName) {
+        if(message.length() > 400) {
+            error("Message too long (" + message.length() + ")", includeName);
+            message = message.substring(0, 400);
+        }
         (channel == null ? user : channel).sendMessage(Codes.RESET + (includeName ? user.getName() + ", " : "") + message);
     }
 
