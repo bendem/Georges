@@ -4,6 +4,7 @@ import be.bendem.bendembot.Context;
 import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
+import be.bendem.bendembot.utils.ModeUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class UserCommand extends BaseCommand {
 
     public UserCommand(Georges georges) {
         super("user", new String[]{
-            "User management command - Usage ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <target> [global]"
+            "User management command - Usage: ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <target>"
         }, "u");
         admins = georges.getAdmins();
     }
@@ -35,16 +36,20 @@ public class UserCommand extends BaseCommand {
             return;
         }
 
-        // TODO Implement stuff ;)
         String target = args.get(0);
-        if(args.size() > 1 && args.get(1).equalsIgnoreCase("true")) {
 
-        }
+        // TODO Add global to do the action in every chan the bot is opped in
+        //boolean global = false;
+        //if(args.size() > 1 && args.get(1).equalsIgnoreCase("true")) {
+        //    global = true;
+        //}
 
         switch(action) {
             case Ban:
+                ModeUtils.ban(context.getServer(), context.getChannel(), target);
                 break;
             case Op:
+                ModeUtils.op(context.getServer(), context.getChannel(), target);
                 break;
             case Kick:
                 break;
