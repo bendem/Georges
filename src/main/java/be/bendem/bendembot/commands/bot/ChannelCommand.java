@@ -93,6 +93,7 @@ public class ChannelCommand extends BaseCommand {
             context.error("channel not found");
             return;
         }
+        context.getServer().removeChannel(channelToLeave.getName());
         context.getServer().send(new PartIrcPacket(channelToLeave.getName()));
     }
 
