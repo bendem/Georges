@@ -2,6 +2,7 @@ package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.commands.BaseCommand;
+import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.StrUtils;
 
 import java.io.BufferedReader;
@@ -30,10 +31,10 @@ public class PingCommand extends BaseCommand {
             context.message("Pong.", false);
             return;
         }
-        Target target = StrUtils.isUrl(args.get(0)) ? Target.Site : Target.User;
+        Target target = EnumUtils.getIgnoreCase(Target.class, primaryArgument, Target.User);
         switch(target) {
             case User:
-                pingUser(args.size() == 0 ? context.getUser().getName() : args.get(0));
+                pingUser(args.get(0), context);
                 break;
             case Site:
                 pingSite(args.get(0), context);
@@ -41,7 +42,8 @@ public class PingCommand extends BaseCommand {
         }
     }
 
-    private void pingUser(String nick) {
+    private void pingUser(String nick, Context context) {
+        context.error("Not implemented yet");
     }
 
     private void pingSite(String url, Context context) {
