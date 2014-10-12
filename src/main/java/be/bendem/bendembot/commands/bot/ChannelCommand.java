@@ -3,7 +3,7 @@ package be.bendem.bendembot.commands.bot;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
-import be.bendem.bendembot.utils.NickUtils;
+import be.bendem.bendembot.utils.StrUtils;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Receiver;
 import fr.ribesg.alix.api.message.PartIrcPacket;
@@ -120,7 +120,7 @@ public class ChannelCommand extends BaseCommand {
             if(permA.ordinal() < permB.ordinal())
                 return -1;
             return user1.compareTo(user2);
-        }).map(NickUtils::antiHighlight).iterator();
+        }).map(StrUtils::antiPing).iterator();
 
         // TODO Filter if too much users
         StringBuilder message = new StringBuilder("There are ")

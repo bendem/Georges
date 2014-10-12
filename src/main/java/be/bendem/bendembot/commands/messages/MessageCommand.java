@@ -6,6 +6,7 @@ import be.bendem.bendembot.automatedmessages.MessageEventHandler;
 import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
+import be.bendem.bendembot.utils.StrUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
@@ -132,7 +133,7 @@ public class MessageCommand extends BaseCommand {
         if(errored.size() == 0) {
             context.message(events.size() + " events added.");
         } else {
-            context.error(StringUtils.join(errored, ", ") + ' ' + (errored.size() > 1 ? "were" : "was") +  " not found.");
+            context.error(StringUtils.join(errored, ", ") + ' ' + StrUtils.plural(errored.size(), "was", "were") + " not found.");
         }
     }
 

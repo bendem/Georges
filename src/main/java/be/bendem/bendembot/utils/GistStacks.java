@@ -51,14 +51,7 @@ public class GistStacks {
         }
     }
 
-    private static String generateString(Throwable throwable) {/*
-        PrintStream stream = new PrintStream(new ByteArrayOutputStream());
-        throwable.printStackTrace(stream);
-        try {
-            return stream.toString();
-        } finally {
-            stream.close();
-        }*/
+    private static String generateString(Throwable throwable) {
         StringBuilder builder = new StringBuilder();
         generateString(throwable, builder);
         return builder.toString();

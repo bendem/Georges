@@ -2,7 +2,7 @@ package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.commands.BaseCommand;
-import be.bendem.bendembot.utils.EnumUtils;
+import be.bendem.bendembot.utils.StrUtils;
 
 import java.util.List;
 
@@ -13,17 +13,17 @@ public class PingCommand extends BaseCommand {
 
     public PingCommand() {
         super("ping", new String[] {
-            "Pings a user or a website - Usage ##.<user|site> [user|site]"
-        });
+            "Pings a user or a website - Usage: ## [user|site]"
+        }, "pi");
     }
 
     @Override
     protected void exec(Context context, String primaryArgument, List<String> args) {
-        Target target = EnumUtils.getIgnoreCase(Target.class, primaryArgument, Target.User);
-        if(args.size() == 0 && target == Target.Site) {
-            context.error("Missing arguments");
+        if(args.size() == 0) {
+            context.message("Pong.", false);
             return;
         }
+        Target target = StrUtils.isUrl(args.get(0)) ? Target.Site : Target.User;
         switch(target) {
             case User:
                 pingUser(args.size() == 0 ? context.getUser().getName() : args.get(0));
@@ -35,6 +35,7 @@ public class PingCommand extends BaseCommand {
     }
 
     private void pingUser(String nick) {
+
     }
 
     private void pingSite(String url) {

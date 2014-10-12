@@ -4,7 +4,7 @@ import be.bendem.bendembot.Context;
 import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.NickServ;
-import be.bendem.bendembot.utils.NickUtils;
+import be.bendem.bendembot.utils.StrUtils;
 
 import java.util.List;
 
@@ -53,6 +53,6 @@ public class NickServCommand extends BaseCommand {
             default:
                 throw new AssertionError("a wild enum value appeared");
         }
-        context.message(NickUtils.antiHighlight(message.append('.').toString()));
+        context.message(StrUtils.antiPing(message.append('.').toString()));
     }
 }
