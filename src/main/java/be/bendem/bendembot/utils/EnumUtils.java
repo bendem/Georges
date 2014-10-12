@@ -38,12 +38,13 @@ public class EnumUtils {
      *
      * @param enumType the type of the enum to get the value from
      * @param name the name of the value to get
-     * @param ifEmptyOrNull the value to return if the name is null or empty
+     * @param ifEmptyOrNull the value to return if the name is null, empty or
+     *     doesn't correspong to an enum value
      * @param <E> the enum to get the value from
      * @return the value of the enum corresponding to the name
      */
     public static <E extends Enum<E>> E getIgnoreCase(Class<E> enumType, String name, E ifEmptyOrNull) {
-        return getIgnoreCase(enumType, name, ifEmptyOrNull, null);
+        return getIgnoreCase(enumType, name, ifEmptyOrNull, ifEmptyOrNull);
     }
 
     /**
