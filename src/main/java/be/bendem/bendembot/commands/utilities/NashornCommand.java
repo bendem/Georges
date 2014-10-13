@@ -44,6 +44,7 @@ public class NashornCommand extends BaseCommand {
     // `calc var list = new java.util.ArrayList(); list.add('a'); list.add('b'); list.add('a'); for each (var el in list) Out.print(el);
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void exec(Context context, String primaryArgument, List<String> args) {
         String script = String.join(" ", args);
         // TODO Use a SecurityManager to deny all permissions of a separate thread executing engine.eval(script) instead
