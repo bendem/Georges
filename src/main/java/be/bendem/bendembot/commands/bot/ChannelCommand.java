@@ -1,6 +1,7 @@
 package be.bendem.bendembot.commands.bot;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.StrUtils;
@@ -18,10 +19,13 @@ import java.util.Set;
  */
 public class ChannelCommand extends BaseCommand {
 
-    public ChannelCommand() {
+    private final Georges bot;
+
+    public ChannelCommand(Georges bot) {
         super("channel", new String[] {
             "Channel control - Usage: ##.<" + EnumUtils.joinValues(Action.class, "|") + "> [channel] [more]"
         }, "c");
+        this.bot = bot;
     }
 
     @Override
@@ -38,12 +42,14 @@ public class ChannelCommand extends BaseCommand {
         }
 
         Action action = EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.List);
-        if(action == Action.Join || action == Action.Leave) {
+        if((action == Action.Join || action == Action.Leave) && !bot.isBotAdmin(context.getUser().getName())) {
             // TODO Maybe a better system to prevent the bot from going in the wild / leaving not wanted channels
-            if(!context.getUser().getName().equals("bendem")) {
-                context.error("You need to be a channel operator to do that");
-                return;
-            }
+            context.error("You need to be a bot admin to do that");
+            return;
+        }
+        if(action != Action.List && channel == null) {
+            context.error("No channel specified");
+            return;
         }
 
         switch(action) {
@@ -59,6 +65,8 @@ public class ChannelCommand extends BaseCommand {
             case Users:
                 users(context, channel, args.size() > 1 && args.get(1).equalsIgnoreCase("more"));
                 break;
+            case Topic:
+                context.message("Topic for " + channel + " is " + context.getServer().getChannel(channel).getTopic());
         }
     }
 
@@ -152,7 +160,7 @@ public class ChannelCommand extends BaseCommand {
     }
 
     private enum Action {
-        List, Join, Leave, Users
+        List, Join, Leave, Users, Topic
     }
 
 }

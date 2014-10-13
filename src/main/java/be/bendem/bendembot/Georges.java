@@ -78,7 +78,7 @@ public class Georges extends Client {
             .setUnknownCommandMessage(null);
 
         // Control commands
-        register(new ChannelCommand());
+        register(new ChannelCommand(this));
         register(new NickCommand());
         register(new QuitCommand(this));
         register(new TellCommand());
