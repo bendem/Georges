@@ -14,7 +14,8 @@ public class StrUtils {
         StringBuilder builder = new StringBuilder();
         for(String word : text.split(" ")) {
             builder
-                .append(isUrl(word) ? word : antiPingWord(word))
+                // if it's an url or if it already contains a color code
+                .append(isUrl(word) || word.contains(Character.toString((char) 0x03)) ? word : antiPingWord(word))
                 .append(" ");
         }
         return builder.toString();
