@@ -30,12 +30,12 @@ public class TwitterChat implements ChatHandler {
         if(id == null || id.isEmpty()) {
             JsonObject user = twitterApiUtils.getUser(screenName);
             toSend = user.get("name").getAsString()
-                    + "(@" + user.get("screen_name").getAsString() + ") "
+                    + " (@" + user.get("screen_name").getAsString() + ") "
                     + user.get("followers_count").getAsInt() + " followers, "
-                    + user.get("friends_count").getAsInt() + "followings, "
+                    + user.get("friends_count").getAsInt() + " followings, "
                     + user.get("statuses_count") + " tweets "
                     // Is twitter account protected?
-                    + "(" + (user.get("protected").getAsBoolean() ? Codes.RED + "X" : Codes.LIGHT_GREEN + "V") + Codes.RESET + ").";
+                    + "(" + (user.get("protected").getAsBoolean() ? Codes.RED + "\u2718" : Codes.LIGHT_GREEN + "\u2713") + Codes.RESET + ").";
         } else {
             //tweet
             JsonObject tweet = twitterApiUtils.getTweet(id);
