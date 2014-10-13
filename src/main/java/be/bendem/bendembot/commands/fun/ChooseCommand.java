@@ -16,7 +16,7 @@ public class ChooseCommand extends BaseCommand {
     public ChooseCommand() {
         super("choose", new String[] {
             "Chooses between propositions - Usage: ## <choice 1>[, next choices...]"
-        });
+        }, "pick");
     }
 
     @Override
