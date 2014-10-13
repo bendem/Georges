@@ -35,7 +35,7 @@ public class ChatManager {
                     handler.onChat(context, message, matcher);
                 } catch(Exception e) {
                     context.error(e.getClass().getSimpleName() + (e.getMessage() == null ? "" : e.getMessage()));
-                    Georges.getLogger().error(e);
+                    Georges.getLogger().error("Error while parsing '" + message + "' with " + handler.getClass().getSimpleName(), e);
                 }
             }
         }

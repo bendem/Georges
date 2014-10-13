@@ -37,7 +37,7 @@ public class Configuration extends AlixConfiguration {
         try {
             load(bot);
         } catch(IOException e) {
-            Georges.getLogger().error(e);
+            Georges.getLogger().error("Failed to load config", e);
         }
     }
 

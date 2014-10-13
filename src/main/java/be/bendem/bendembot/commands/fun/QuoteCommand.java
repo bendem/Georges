@@ -53,7 +53,7 @@ public class QuoteCommand extends BaseCommand {
                 List<String> collected = reader.lines().collect(Collectors.toList());
                 quotes.put(type, collected);
             } catch(IOException e) {
-                Georges.getLogger().error(e);
+                Georges.getLogger().error("Error while loading quotes", e);
             }
         }
     }

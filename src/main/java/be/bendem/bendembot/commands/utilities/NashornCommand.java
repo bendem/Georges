@@ -84,7 +84,7 @@ public class NashornCommand extends BaseCommand {
             try {
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch(InterruptedException e) {
-                Georges.getLogger().error(e);
+                Georges.getLogger().error("Interrupted while waiting script end", e);
             }
             // force them to quit by interrupting
             if(thread.isAlive()) {
@@ -99,7 +99,7 @@ public class NashornCommand extends BaseCommand {
         try {
             engine.eval("var Out = Java.type('be.bendem.bendembot.commands.utilities.NashornCommand.OutputHandler');");
         } catch(ScriptException e) {
-            Georges.getLogger().error(e);
+            Georges.getLogger().error("Error while evaluating nashorn prescript", e);
         }
         return engine;
     }

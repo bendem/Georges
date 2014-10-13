@@ -125,7 +125,7 @@ public class FarooCommand extends BaseCommand {
             );
         } catch(IOException e) {
             context.error("Such stacktrace: " + GistStacks.gist(e));
-            Georges.getLogger().error(e);
+            Georges.getLogger().error("Failed to contact faroo api", e);
             return null;
         }
     }

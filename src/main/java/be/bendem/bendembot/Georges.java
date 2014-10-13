@@ -58,7 +58,7 @@ public class Georges extends Client {
             try {
                 configuration.save();
             } catch(IOException e) {
-                Georges.getLogger().error(e);
+                Georges.getLogger().error("Failed to save config", e);
             }
         }
 
