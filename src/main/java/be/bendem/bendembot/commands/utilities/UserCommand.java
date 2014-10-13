@@ -3,31 +3,37 @@ package be.bendem.bendembot.commands.utilities;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
+import be.bendem.bendembot.custompackets.KickIrcPacket;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.ModeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author bendem
  */
 public class UserCommand extends BaseCommand {
 
-    private final Set<String> admins;
+    private final Georges bot;
 
-    public UserCommand(Georges georges) {
+    public UserCommand(Georges bot) {
         super("user", new String[]{
             "User management command - Usage: ##.<" + EnumUtils.joinValues(Action.class, "|") + "> <target>"
         }, "u");
-        admins = georges.getAdmins();
+        this.bot = bot;
     }
 
     @Override
     protected void exec(Context context, String primaryArgument, List<String> args) {
         Action action = EnumUtils.getIgnoreCase(Action.class, primaryArgument, Action.Seen);
-        if(action.isRestricted() && !admins.contains(context.getUser().getName())) {
+        if(action.isRestricted() && !bot.getAdmins().contains(context.getUser().getName())) {
             context.error("You don't have the right to use that command :/");
+            return;
+        }
+
+        if(!context.getChannel().isOp(bot.getName())) {
+            context.error("I'm not op in this channel");
             return;
         }
 
@@ -38,24 +44,26 @@ public class UserCommand extends BaseCommand {
 
         String target = args.get(0);
 
-        // TODO Add global to do the action in every chan the bot is opped in
-        //boolean global = false;
-        //if(args.size() > 1 && args.get(1).equalsIgnoreCase("true")) {
-        //    global = true;
-        //}
-
         switch(action) {
             case Ban:
                 ModeUtils.ban(context.getServer(), context.getChannel(), target);
+                // Fall through, ban causes kick
+            case Kick:
+                String reason = "You know why";
+                if(args.size() > 1) {
+                    reason = StringUtils.join(args.listIterator(1), ' ');
+                }
+                context.getServer().send(new KickIrcPacket(context.getChannel(), target, reason));
                 break;
             case Op:
                 ModeUtils.op(context.getServer(), context.getChannel(), target);
                 break;
-            case Kick:
+            case Voice:
+                ModeUtils.voice(context.getServer(), context.getChannel(), target);
                 break;
             case Seen:
-                break;
-            case Voice:
+                // TODO
+                context.error("Not implemented yet");
                 break;
         }
     }
