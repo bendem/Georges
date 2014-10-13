@@ -1,7 +1,6 @@
 package be.bendem.bendembot.chathandling;
 
 import be.bendem.bendembot.Context;
-import be.bendem.bendembot.Georges;
 import fr.ribesg.alix.api.event.ChannelMessageEvent;
 import fr.ribesg.alix.api.event.EventHandler;
 

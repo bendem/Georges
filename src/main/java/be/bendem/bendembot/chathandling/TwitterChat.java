@@ -3,7 +3,6 @@ package be.bendem.bendembot.chathandling;
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.utils.StrUtils;
 import be.bendem.bendembot.utils.TwitterApiUtils;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.ribesg.alix.api.enums.Codes;
 
