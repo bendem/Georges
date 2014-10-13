@@ -21,6 +21,7 @@ import be.bendem.bendembot.commands.utilities.UserCommand;
 import be.bendem.bendembot.configuration.Configuration;
 import be.bendem.bendembot.usermanagement.UserManager;
 import be.bendem.bendembot.utils.Time;
+import be.bendem.bendembot.utils.TwitterApiUtils;
 import fr.ribesg.alix.api.Client;
 import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.Log;
@@ -77,6 +78,8 @@ public class Georges extends Client {
 
         EventManager.register(new BotHandler(this));
 
+        TwitterApiUtils twitterApiUtils = new TwitterApiUtils(configuration);
+
         createCommandManager("`", configuration.getAdmins())
             .setUnknownCommandMessage(null);
 
@@ -91,11 +94,7 @@ public class Georges extends Client {
         register(new NashornCommand());
         register(new NickServCommand(this));
         register(new PingCommand());
-        register(new TwitterCommand(
-            configuration.getTwitterApiKey(),
-            configuration.getTwitterApiKeySecret(),
-            configuration.getTwitterAccessToken(),
-            configuration.getTwitterAccessTokenSecret()));
+        register(new TwitterCommand(twitterApiUtils));
         register(new UserCommand(this));
 
         // Fun commands
