@@ -6,6 +6,7 @@ import be.bendem.bendembot.commands.bot.ChannelCommand;
 import be.bendem.bendembot.commands.bot.NickCommand;
 import be.bendem.bendembot.commands.bot.QuitCommand;
 import be.bendem.bendembot.commands.bot.TellCommand;
+import be.bendem.bendembot.commands.fun.ChooseCommand;
 import be.bendem.bendembot.commands.fun.DiceCommand;
 import be.bendem.bendembot.commands.fun.QuoteCommand;
 import be.bendem.bendembot.commands.messages.DataCommand;
@@ -97,6 +98,7 @@ public class Georges extends Client {
         // Fun commands
         register(new DiceCommand());
         register(new QuoteCommand());
+        register(new ChooseCommand());
 
         // Message commands
         register(new DataCommand(messageManager));
