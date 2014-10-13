@@ -55,7 +55,8 @@ public abstract class BaseCommand extends Command {
      */
     @Override
     public synchronized boolean exec(Server server, Channel channel, Source user, String primaryArgument, String[] args) {
-        Georges.getLogger().info(user.getName() + " issued " + getClass().getSimpleName() + " in " + channel.getName() + " on " + server.getName());
+        Georges.getLogger().info(user.getName() + " issued a command in " + server.getName() + (channel == null ? "|PM" : channel.getName()));
+        Georges.getLogger().info("| " + getName() + '.' + primaryArgument + ' ' + String.join(" ", args));
 
         Context context = new Context(channel, user);
         try {
