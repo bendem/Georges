@@ -31,7 +31,7 @@ public class TwitterChat implements ChatHandler {
             JsonObject user = twitterApiUtils.getUser(screenName);
             toSend = user.get("name").getAsString()
                     + "(@" + user.get("screen_name").getAsString() + ") "
-                    + user.get("follower").getAsInt() + " followers, "
+                    + user.get("followers_count").getAsInt() + " followers, "
                     + user.get("friends_count").getAsInt() + "followings, "
                     + user.get("statuses_count") + " tweets "
                     // Is twitter account protected?
