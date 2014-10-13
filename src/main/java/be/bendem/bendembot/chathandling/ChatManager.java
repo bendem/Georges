@@ -1,6 +1,8 @@
 package be.bendem.bendembot.chathandling;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
+import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.event.ChannelMessageEvent;
 import fr.ribesg.alix.api.event.EventHandler;
 
@@ -17,18 +19,24 @@ public class ChatManager {
 
     public ChatManager() {
         this.chatHandlers = new ArrayList<>();
+        EventManager.register(this);
     }
 
 
     @EventHandler
-    public void onChannelMessage(final ChannelMessageEvent e) {
-        Context context = new Context(e.getChannel(), e.getUser());
-        String message = e.getMessage().trim();
+    public void onChannelMessage(final ChannelMessageEvent event) {
+        Context context = new Context(event.getChannel(), event.getUser());
+        String message = event.getMessage().trim();
 
         for(ChatHandler handler : chatHandlers) {
             Matcher matcher = handler.matcher(message);
             if(matcher.find()) {
-                handler.onChat(context, message, matcher);
+                try {
+                    handler.onChat(context, message, matcher);
+                } catch(Exception e) {
+                    context.error(e.getClass().getSimpleName() + (e.getMessage() == null ? "" : e.getMessage()));
+                    Georges.getLogger().error(e);
+                }
             }
         }
     }
