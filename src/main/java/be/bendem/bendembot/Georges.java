@@ -1,6 +1,8 @@
 package be.bendem.bendembot;
 
 import be.bendem.bendembot.automatedmessages.MessageManager;
+import be.bendem.bendembot.chathandling.ChatManager;
+import be.bendem.bendembot.chathandling.TwitterChat;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.ChannelCommand;
 import be.bendem.bendembot.commands.bot.NickCommand;
@@ -79,6 +81,9 @@ public class Georges extends Client {
         EventManager.register(new BotHandler(this));
 
         TwitterApiUtils twitterApiUtils = new TwitterApiUtils(configuration);
+
+        ChatManager chatManager = new ChatManager();
+        chatManager.register(new TwitterChat(twitterApiUtils));
 
         createCommandManager("`", configuration.getAdmins())
             .setUnknownCommandMessage(null);

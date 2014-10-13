@@ -58,24 +58,6 @@ public class BotHandler {
     }
 
     @EventHandler
-    public void onChannelMessage(final ChannelMessageEvent e) {
-        Channel channel = e.getChannel();
-        Source author = e.getUser();
-        String message = e.getMessage();
-
-        if(Time.since(bot.getLastJoke()) > 30_000) {
-            // Curlybear is op
-            if(message.toLowerCase().contains("hue hue hue") && !bot.isBotAdmin(author.getName())) {
-                channel.getServer().send(new ActionIrcPacket(channel.getName(), "instanciates his ban utility..."));
-                bot.setLastJoke(Time.now());
-            } else if(message.toLowerCase().startsWith("hue") && author.getName().toLowerCase().contains("bear")) {
-                channel.sendMessage("hue? I guess you mean HUE HUE HUE!?");
-                bot.setLastJoke(Time.now());
-            }
-        }
-    }
-
-    @EventHandler
     public void onBotKicked(ClientKickedFromChannelEvent e) {
         e.getChannel().getServer().removeChannel(e.getChannel().getName());
     }
