@@ -26,6 +26,8 @@ import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.bot.util.PasteUtil;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Set;
@@ -43,7 +45,7 @@ public class Georges extends Client {
 
     public Georges(String name) {
         super(name);
-        Log.info("Starting up...");
+        logger.info("Starting up...");
 
         PasteUtil.setMode(null);
 
@@ -52,7 +54,7 @@ public class Georges extends Client {
             try {
                 configuration.save();
             } catch(IOException e) {
-                e.printStackTrace();
+                Georges.getLogger().error(e);
             }
         }
 
@@ -150,9 +152,9 @@ public class Georges extends Client {
         killed = true;
         try {
             super.kill();
-            Log.info("Exited!");
+            logger.info("Exited!");
         } catch(Throwable t) {
-            Log.error("Could not kill bot", t);
+            logger.error("Could not kill bot", t);
             killed = false;
         }
         System.exit(0);
@@ -167,10 +169,20 @@ public class Georges extends Client {
     }
 
     public static void main(final String args[]) {
+        Log.get().setLevel(Level.INFO);
         Georges georges = new Georges("Georges");
 
         while(!System.console().readLine().equalsIgnoreCase("stop"));
         georges.kill();
+    }
+
+    private static final Logger logger = Logger.getLogger("Georges");
+    static {
+        logger.setLevel(Level.ALL);
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 
 }

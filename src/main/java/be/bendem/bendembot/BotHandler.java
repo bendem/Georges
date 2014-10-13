@@ -3,7 +3,6 @@ package be.bendem.bendembot;
 import be.bendem.bendembot.custompackets.ActionIrcPacket;
 import be.bendem.bendembot.utils.Time;
 import fr.ribesg.alix.api.Channel;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.event.ChannelMessageEvent;
@@ -43,7 +42,7 @@ public class BotHandler {
         IrcPacket ircPacket = e.getPacket();
 
         if(ircPacket instanceof ModeIrcPacket) {
-            Log.info("MODE Packet handled");
+            Georges.getLogger().info("MODE Packet handled");
             ModeIrcPacket modePacket = (ModeIrcPacket) ircPacket;
             String[] parameters = modePacket.getParameters();
             if(parameters.length < 1) {

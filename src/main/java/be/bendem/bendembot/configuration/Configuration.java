@@ -37,7 +37,7 @@ public class Configuration extends AlixConfiguration {
         try {
             load(bot);
         } catch(IOException e) {
-            e.printStackTrace();
+            Georges.getLogger().error(e);
         }
     }
 

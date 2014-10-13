@@ -1,6 +1,6 @@
 package be.bendem.bendembot.utils;
 
-import fr.ribesg.alix.api.Log;
+import be.bendem.bendembot.Georges;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.callback.Callback;
@@ -52,7 +52,7 @@ public class NickServ {
 
             Matcher matcher = ACC_PARSER.matcher(packet.getTrail().trim());
             if(!matcher.matches()) {
-                Log.error("Error while matching " + packet.getTrail());
+                Georges.getLogger().error("Error while matching " + packet.getTrail());
                 return true;
             }
 
@@ -114,9 +114,9 @@ public class NickServ {
             Validate.notNull(status, "status can't be null");
             Validate.isTrue((eid == null) != (precision == null), "either eid or precision should be null, not none, not the two of them");
 
-            Log.debug("NickServ answer");
-            Log.debug(eid);
-            Log.debug(precision);
+            Georges.getLogger().debug("NickServ answer");
+            Georges.getLogger().debug(eid);
+            Georges.getLogger().debug(precision);
 
             this.nick = nick;
             this.account = account;

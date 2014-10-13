@@ -1,9 +1,9 @@
 package be.bendem.bendembot.commands;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.utils.GistStacks;
 import fr.ribesg.alix.api.Channel;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
 import fr.ribesg.alix.api.bot.command.Command;
@@ -55,11 +55,13 @@ public abstract class BaseCommand extends Command {
      */
     @Override
     public synchronized boolean exec(Server server, Channel channel, Source user, String primaryArgument, String[] args) {
+        Georges.getLogger().info(user.getName() + " issued " + getClass().getSimpleName() + " in " + channel.getName() + " on " + server.getName());
+
         Context context = new Context(channel, user);
         try {
             this.exec(context, primaryArgument, Arrays.asList(args));
         } catch(Exception e) {
-            Log.error("Error while executing " + getClass().getSimpleName() + " command", e);
+            Georges.getLogger().error("Error while executing " + getClass().getSimpleName() + " command", e);
             context.error("A problem happened, you might want to check " + GistStacks.gist(e), false);
         }
         return true;

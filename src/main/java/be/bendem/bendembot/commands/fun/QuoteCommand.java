@@ -1,11 +1,11 @@
 package be.bendem.bendembot.commands.fun;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.Language;
 import be.bendem.bendembot.utils.ResourceUtils;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.enums.Codes;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,7 +44,7 @@ public class QuoteCommand extends BaseCommand {
     }
 
     private void debugThemQuotez() {
-        quotes.forEach((type, list) -> Log.debug(type.name() + ": " + StringUtils.join(list, "\n\t")));
+        quotes.forEach((type, list) -> Georges.getLogger().debug(type.name() + ": " + StringUtils.join(list, "\n\t")));
     }
 
     private void loadThemFilez() {
@@ -53,7 +53,7 @@ public class QuoteCommand extends BaseCommand {
                 List<String> collected = reader.lines().collect(Collectors.toList());
                 quotes.put(type, collected);
             } catch(IOException e) {
-                e.printStackTrace();
+                Georges.getLogger().error(e);
             }
         }
     }

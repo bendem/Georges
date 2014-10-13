@@ -1,6 +1,6 @@
 package be.bendem.bendembot.usermanagement;
 
-import fr.ribesg.alix.api.Log;
+import be.bendem.bendembot.Georges;
 import fr.ribesg.alix.api.event.ClientJoinChannelEvent;
 import fr.ribesg.alix.api.event.EventHandler;
 import fr.ribesg.alix.api.event.UserJoinChannelEvent;
@@ -19,7 +19,7 @@ public class UserManagerEvents {
     @EventHandler(ignoreConsumed = false)
     public void onJoin(UserJoinChannelEvent e) {
         if(!manager.getUsers().containsKey(e.getUser().getName())) {
-            Log.info("Adding " + e.getUser().getName() + "!" + e.getUser().getUserName() + " to known list");
+            Georges.getLogger().info("Adding " + e.getUser().getName() + "!" + e.getUser().getUserName() + " to known list");
             manager.getUsers().put(e.getUser().getName(), new User(e.getUser()));
         }
     }

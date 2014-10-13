@@ -1,8 +1,8 @@
 package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
-import fr.ribesg.alix.api.Log;
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.Permission;
@@ -30,7 +30,7 @@ public class NashornCommand extends BaseCommand {
             "java\\.n?io",
             "be\\.", "fr\\."
         };
-        Log.debug('(' + StringUtils.join(blacklist, "|") + ')');
+        Georges.getLogger().debug('(' + StringUtils.join(blacklist, "|") + ')');
         SANITIZE = Pattern.compile(".*(?:" + StringUtils.join(blacklist, "|") + ").*", Pattern.CASE_INSENSITIVE);
     }
 
@@ -73,7 +73,7 @@ public class NashornCommand extends BaseCommand {
                         context.message("STDOUT: " + String.join(" | ", OutputHandler.output));
                     }
                 } catch(ScriptException e) {
-                    Log.error("Error while executing nashorn script", e);
+                    Georges.getLogger().error("Error while executing nashorn script", e);
                     context.error(e.getMessage().split("\r?\n")[0]);
                 } finally {
                     OutputHandler.output.clear();
@@ -84,7 +84,7 @@ public class NashornCommand extends BaseCommand {
             try {
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch(InterruptedException e) {
-                e.printStackTrace();
+                Georges.getLogger().error(e);
             }
             // force them to quit by interrupting
             if(thread.isAlive()) {
@@ -99,7 +99,7 @@ public class NashornCommand extends BaseCommand {
         try {
             engine.eval("var Out = Java.type('be.bendem.bendembot.commands.utilities.NashornCommand.OutputHandler');");
         } catch(ScriptException e) {
-            e.printStackTrace(System.err);
+            Georges.getLogger().error(e);
         }
         return engine;
     }

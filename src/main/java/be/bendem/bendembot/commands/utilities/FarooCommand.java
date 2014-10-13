@@ -1,6 +1,7 @@
 package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.EnumUtils;
 import be.bendem.bendembot.utils.GistStacks;
@@ -124,7 +125,7 @@ public class FarooCommand extends BaseCommand {
             );
         } catch(IOException e) {
             context.error("Such stacktrace: " + GistStacks.gist(e));
-            e.printStackTrace();
+            Georges.getLogger().error(e);
             return null;
         }
     }

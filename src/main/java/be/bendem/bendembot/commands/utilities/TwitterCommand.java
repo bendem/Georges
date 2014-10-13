@@ -1,13 +1,13 @@
 package be.bendem.bendembot.commands.utilities;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.utils.StrUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.enums.Codes;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
@@ -75,7 +75,7 @@ public class TwitterCommand extends BaseCommand {
         final StringBuilder url = new StringBuilder(TWITTER_ENDPOINT).append(route);
 
         params.forEach((key, value)->url.replace(url.indexOf(key), url.indexOf(key) + key.length(), value));
-        Log.info(url.toString());
+        Georges.getLogger().info(url.toString());
 
         OAuthRequest request = new OAuthRequest(Verb.GET, url.toString());
         service.signRequest(token, request);

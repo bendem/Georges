@@ -1,9 +1,9 @@
 package be.bendem.bendembot.utils;
 
+import be.bendem.bendembot.Georges;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.bot.util.WebUtil;
 
 import java.io.IOException;
@@ -40,13 +40,13 @@ public class GistStacks {
         json.add("files", files);
 
         String data = new Gson().toJson(json);
-        Log.debug(data);
+        Georges.getLogger().debug(data);
         try {
             // TODO OAuth?
             String response = WebUtil.post("https://api.github.com/gists", "application/json", data, HEADERS);
             return new JsonParser().parse(response).getAsJsonObject().get("html_url").getAsString();
         } catch(IOException e) {
-            Log.error("Could not post stacktrace", e);
+            Georges.getLogger().error("Could not post stacktrace", e);
             return "'nothing'. There was an error when posting the stacktrace: " + e.getMessage();
         }
     }
