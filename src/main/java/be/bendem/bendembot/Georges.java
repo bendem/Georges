@@ -5,10 +5,13 @@ import be.bendem.bendembot.chathandling.ChatManager;
 import be.bendem.bendembot.chathandling.TwitterChat;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.ChannelCommand;
+import be.bendem.bendembot.commands.bot.DeployCommand;
 import be.bendem.bendembot.commands.bot.NickCommand;
 import be.bendem.bendembot.commands.bot.QuitCommand;
+import be.bendem.bendembot.commands.bot.RestartCommand;
 import be.bendem.bendembot.commands.bot.TellCommand;
 import be.bendem.bendembot.commands.fun.ChooseCommand;
+import be.bendem.bendembot.commands.fun.DanceCommand;
 import be.bendem.bendembot.commands.fun.DiceCommand;
 import be.bendem.bendembot.commands.fun.FlipCommand;
 import be.bendem.bendembot.commands.fun.QuoteCommand;
@@ -90,8 +93,10 @@ public class Georges extends Client {
 
         // Control commands
         register(new ChannelCommand(this));
+        register(new DeployCommand());
         register(new NickCommand());
         register(new QuitCommand(this));
+        register(new RestartCommand());
         register(new TellCommand());
 
         // Utility commands
@@ -104,6 +109,7 @@ public class Georges extends Client {
 
         // Fun commands
         register(new ChooseCommand());
+        register(new DanceCommand());
         register(new DiceCommand());
         register(new FlipCommand());
         register(new QuoteCommand());
