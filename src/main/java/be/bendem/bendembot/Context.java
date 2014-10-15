@@ -1,5 +1,6 @@
 package be.bendem.bendembot;
 
+import be.bendem.bendembot.custompackets.ActionIrcPacket;
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.Source;
@@ -50,6 +51,10 @@ public class Context {
             message = message.substring(0, 400);
         }
         (channel == null ? user : channel).sendMessage(Codes.RESET + (includeName ? user.getName() + ", " : "") + message);
+    }
+
+    public void action(String message) {
+        server.send(new ActionIrcPacket((channel == null ? user : channel).getName(), message));
     }
 
 }
