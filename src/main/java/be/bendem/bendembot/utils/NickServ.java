@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class NickServ {
 
-    private static final Pattern ACC_PARSER = Pattern.compile("^(?<nick>[^\\s]*)\\s+->\\s+(?<account>[^\\s]*)\\s+ACC\\s+(?<code>[0-3])(?:\\s+(?:\\((?<precision>[^)]+)\\)|(?<eid>[A-Z]+)))$");
+    private static final Pattern ACC_PARSER = Pattern.compile("^(?<nick>[^\\s]*)\\s+->\\s+(?<account>[^\\s]*)\\s+ACC\\s+(?<code>[0-3])(?:\\s+(?:\\((?<precision>[^)]+)\\)|(?<eid>[A-Z0-9]+)))$");
 
     public static Response check(Server server, String nick) throws InterruptedException {
         final Object lock = new Object();
