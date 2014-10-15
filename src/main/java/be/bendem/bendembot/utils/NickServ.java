@@ -46,14 +46,17 @@ public class NickServ {
         public boolean onReceivedPacket(ReceivedPacketEvent e) {
             IrcPacket packet = e.getPacket();
             Source source = packet.getPrefixAsSource(e.getSource());
+
+            // Not from NickServ
             if(source == null || !source.getName().equals("NickServ")) {
                 return false;
             }
 
             Matcher matcher = ACC_PARSER.matcher(packet.getTrail().trim());
+
+            // Not an ACC response
             if(!matcher.matches()) {
-                Georges.getLogger().error("Error while matching " + packet.getTrail());
-                return true;
+                return false;
             }
 
             // Matches another request
