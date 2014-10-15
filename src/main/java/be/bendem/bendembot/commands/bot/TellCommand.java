@@ -1,6 +1,7 @@
 package be.bendem.bendembot.commands.bot;
 
 import be.bendem.bendembot.Context;
+import be.bendem.bendembot.Georges;
 import be.bendem.bendembot.commands.BaseCommand;
 import fr.ribesg.alix.api.enums.Codes;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
@@ -12,10 +13,13 @@ import java.util.List;
  */
 public class TellCommand extends BaseCommand {
 
-    public TellCommand() {
+    private final Georges bot;
+
+    public TellCommand(Georges bot) {
         super("tell", new String[] {
             "Tells something to someone"
-        }, true, "t");
+        }, "t");
+        this.bot = bot;
     }
 
     @Override
@@ -24,8 +28,12 @@ public class TellCommand extends BaseCommand {
             context.error("Not enough argument");
             return;
         }
+        if(!bot.isBotAdmin(context.getUser().getName()) && !args.get(0).startsWith("#")) {
+            context.error("You can't send private messages");
+            return;
+        }
         String target = args.get(0);
-        String text = String.join(" ", args.subList(1, args.size()));
+        String text = "From " + context.getUser().getName() + ": " + String.join(" ", args.subList(1, args.size()));
         PrivMsgIrcPacket packet = new PrivMsgIrcPacket(target, text);
         context.getServer().send(packet);
         if(context.getChannel() == null) {

@@ -97,7 +97,7 @@ public class Georges extends Client {
         register(new NickCommand());
         register(new QuitCommand(this));
         register(new RestartCommand());
-        register(new TellCommand());
+        register(new TellCommand(this));
 
         // Utility commands
         register(new FarooCommand(configuration.getFarooKey()));
