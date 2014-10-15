@@ -26,6 +26,7 @@ public class DanceCommand extends BaseCommand {
         }
         if(Time.since(lastUsed) < TimeUnit.MINUTES.toMillis(1)) {
             context.action("doesn't want to dance anymore");
+            return;
         }
         context.message("<(^_^<)", false);
         context.message("(>^_^)>", false);
