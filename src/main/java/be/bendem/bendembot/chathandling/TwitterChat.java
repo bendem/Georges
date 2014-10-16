@@ -39,7 +39,7 @@ public class TwitterChat implements ChatHandler {
         } else {
             //tweet
             JsonObject tweet = twitterApiUtils.getTweet(id);
-            toSend = tweet.get("text").getAsString()
+            toSend = tweet.get("text").getAsString().replace('\n', ' ')
                 + " by @" + Codes.BOLD + tweet.getAsJsonObject("user").get("screen_name").getAsString()
                 + " " + tweet.get("retweet_count").getAsInt() + " RTs, "
                 + tweet.get("favorite_count").getAsInt() + " favs";
