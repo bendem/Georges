@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DanceCommand extends BaseCommand {
 
-    private long lastUsed = Time.now();
+    private long lastUsed = 0;
 
     public DanceCommand() {
         super("dance", new String[] { "Make me dance \\o/" });
@@ -25,6 +25,7 @@ public class DanceCommand extends BaseCommand {
             return;
         }
         if(Time.since(lastUsed) < TimeUnit.MINUTES.toMillis(1)) {
+            lastUsed = Time.now();
             context.action("doesn't want to dance anymore");
             return;
         }
