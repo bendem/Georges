@@ -13,6 +13,13 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author bendem
  */
@@ -52,10 +59,25 @@ public class TwitterApiUtils {
         OAuthRequest request = new OAuthRequest(Verb.GET, url.toString());
         service.signRequest(token, request);
         Response response = request.send();
-        if(response.getBody() == null) {
+        String answer = readAnswer(response);
+        if(answer == null) {
             throw new RuntimeException("Api response body was null");
         }
-        return new JsonParser().parse(response.getBody());
+        return new JsonParser().parse(answer);
+    }
+
+    private String readAnswer(Response response) {
+        StringBuilder builder = new StringBuilder();
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(response.getStream(), StandardCharsets.UTF_8))) {
+            String input;
+            while((input = reader.readLine()) != null) {
+                builder.append(input);
+            }
+        } catch(IOException e) {
+            Georges.getLogger().error("Error while reading ");
+            return null;
+        }
+        return builder.toString();
     }
 
 }
