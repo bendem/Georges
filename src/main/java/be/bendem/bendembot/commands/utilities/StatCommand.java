@@ -18,7 +18,7 @@ import java.util.Locale;
  */
 public class StatCommand extends BaseCommand {
 
-    private static final NumberFormat FORMAT = new DecimalFormat("#,##0.##", new DecimalFormatSymbols(Locale.FRANCE));
+    private static final NumberFormat FORMAT = new DecimalFormat("#,##0.###", new DecimalFormatSymbols(Locale.FRANCE));
 
     public StatCommand() {
         super("stat", new String[] { "Tiny statistic informations - Usage: ## <value 1>[, next values...]" });
@@ -41,10 +41,10 @@ public class StatCommand extends BaseCommand {
         }
 
         context.message(
-            "min: " + Codes.BOLD + stats.getMin() + Codes.RESET
-            + ", max: " + Codes.BOLD + stats.getMax() + Codes.RESET
-            + ", avg: " + Codes.BOLD + stats.getAverage() + Codes.RESET
-            + ", sum: " + Codes.BOLD + stats.getSum() + Codes.RESET
+            "min: " + Codes.BOLD + FORMAT.format(stats.getMin()) + Codes.RESET
+            + ", max: " + Codes.BOLD + FORMAT.format(stats.getMax()) + Codes.RESET
+            + ", avg: " + Codes.BOLD + FORMAT.format(stats.getAverage()) + Codes.RESET
+            + ", sum: " + Codes.BOLD + FORMAT.format(stats.getSum()) + Codes.RESET
         );
     }
 
