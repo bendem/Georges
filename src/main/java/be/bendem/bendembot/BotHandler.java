@@ -2,14 +2,7 @@ package be.bendem.bendembot;
 
 import fr.ribesg.alix.api.Channel;
 import fr.ribesg.alix.api.Server;
-import fr.ribesg.alix.api.event.ClientJoinChannelEvent;
-import fr.ribesg.alix.api.event.ClientKickedFromChannelEvent;
-import fr.ribesg.alix.api.event.ClientLostConnectionEvent;
-import fr.ribesg.alix.api.event.EventHandler;
-import fr.ribesg.alix.api.event.FailedToJoinServerEvent;
-import fr.ribesg.alix.api.event.ReceivedPacketEvent;
-import fr.ribesg.alix.api.event.ServerJoinEvent;
-import fr.ribesg.alix.api.event.UserPartChannelEvent;
+import fr.ribesg.alix.api.event.*;
 import fr.ribesg.alix.api.message.IrcPacket;
 import fr.ribesg.alix.api.message.ModeIrcPacket;
 

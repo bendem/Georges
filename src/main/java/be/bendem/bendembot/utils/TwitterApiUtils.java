@@ -14,10 +14,8 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 /**
