@@ -2,6 +2,7 @@ package be.bendem.bendembot.commands.fun;
 
 import be.bendem.bendembot.Context;
 import be.bendem.bendembot.commands.BaseCommand;
+import be.bendem.bendembot.utils.StrUtils;
 
 import java.util.List;
 import java.util.Random;
@@ -25,7 +26,7 @@ public class ChooseCommand extends BaseCommand {
             context.error("no choices :(");
             return;
         }
-        String[] choices = String.join(" ", args).split("\\s*,\\s*");
+        String[] choices = StrUtils.commaSplit(args, " ");
         if(choices.length == 1) {
             context.message("Is there really a choice to make? " + choices[0]);
         } else {

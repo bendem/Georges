@@ -21,6 +21,7 @@ import be.bendem.bendembot.commands.utilities.FarooCommand;
 import be.bendem.bendembot.commands.utilities.NashornCommand;
 import be.bendem.bendembot.commands.utilities.NickServCommand;
 import be.bendem.bendembot.commands.utilities.PingCommand;
+import be.bendem.bendembot.commands.utilities.StatCommand;
 import be.bendem.bendembot.commands.utilities.TwitterCommand;
 import be.bendem.bendembot.commands.utilities.UserCommand;
 import be.bendem.bendembot.configuration.Configuration;
@@ -104,6 +105,7 @@ public class Georges extends Client {
         register(new NashornCommand());
         register(new NickServCommand(this));
         register(new PingCommand());
+        register(new StatCommand());
         register(new TwitterCommand(twitterApiUtils));
         register(new UserCommand(this));
 
