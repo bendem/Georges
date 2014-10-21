@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class QuestionChat implements ChatHandler {
 
-    private final Pattern QUESTION = Pattern.compile("^Georges[^a-z].*\\?$");
+    private final Pattern QUESTION = Pattern.compile("^Georges[^a-z].*\\?$", Pattern.CASE_INSENSITIVE);
     private final Random RANDOM = new Random();
     private final String[] ANSWERS = new String[] {
         "yes", "no", "maybe...", "totally!", "why not",
