@@ -2,6 +2,7 @@ package be.bendem.bendembot;
 
 import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.chathandling.ChatManager;
+import be.bendem.bendembot.chathandling.QuestionChat;
 import be.bendem.bendembot.chathandling.TwitterChat;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.*;
@@ -77,6 +78,7 @@ public class Georges extends Client {
 
         ChatManager chatManager = new ChatManager();
         chatManager.register(new TwitterChat(twitterApiUtils));
+        chatManager.register(new QuestionChat());
 
         createCommandManager("`", configuration.getAdmins())
             .setUnknownCommandMessage(null);
