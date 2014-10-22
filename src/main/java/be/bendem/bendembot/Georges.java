@@ -4,6 +4,7 @@ import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.chathandling.ChatManager;
 import be.bendem.bendembot.chathandling.QuestionChat;
 import be.bendem.bendembot.chathandling.TwitterChat;
+import be.bendem.bendembot.chathandling.ViReplaceChat;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.*;
 import be.bendem.bendembot.commands.fun.ChooseCommand;
@@ -79,6 +80,7 @@ public class Georges extends Client {
         ChatManager chatManager = new ChatManager();
         chatManager.register(new TwitterChat(twitterApiUtils));
         chatManager.register(new QuestionChat());
+        //chatManager.register(new ViReplaceChat()); // TODO Finish that when Georges can remember previous message of someone
 
         createCommandManager("`", configuration.getAdmins())
             .setUnknownCommandMessage(null);
