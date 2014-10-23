@@ -14,16 +14,6 @@
 
     <repositories>
         <repository>
-            <id>ribesg-releases</id>
-            <name>Ribesg's Release Repository</name>
-            <url>http://repo.ribesg.fr/content/repositories/releases</url>
-        </repository>
-        <repository>
-            <id>ribesg-snapshots</id>
-            <name>Ribesg's Snapshots Repository</name>
-            <url>http://repo.ribesg.fr/content/repositories/snapshots</url>
-        </repository>
-        <repository>
             <id>scribe-java-mvn-repo</id>
             <url>https://raw.github.com/fernandezpablo85/scribe-java/mvn-repo/</url>
         </repository>
@@ -87,11 +77,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.ircclouds.irc</groupId>
+            <artifactId>irc-api</artifactId>
+            <version>1.0-0015-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+
+        <dependency>
             <groupId>fr.ribesg.alix</groupId>
             <artifactId>alix</artifactId>
             <version>0.5-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.scribe</groupId>
             <artifactId>scribe</artifactId>
