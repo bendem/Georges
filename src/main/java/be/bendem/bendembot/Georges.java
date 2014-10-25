@@ -110,23 +110,7 @@ public class Georges extends Client {
         register(new DataCommand(messageManager));
         register(new MessageCommand(messageManager));
 
-        EventManager.register(new Object() {
-            @EventHandler
-            public void onMessage(ChannelMessageEvent e) {
-                if(!e.getMessage().startsWith("!")) {
-                    return;
-                }
-                String[] parts = e.getMessage().substring(1).split("\\w+");
-                if(parts.length == 0) {
-                    return;
-                }
-                Context context = new Context(e.getChannel(), e.getUser());
-                String message = messageManager.getTransformedMessage(parts[0], context);
-                if(message != null) {
-                    context.message(message);
-                }
-            }
-        });
+        EventManager.register(new MsgCmd());
     }
 
     private void register(BaseCommand command) {
@@ -207,4 +191,21 @@ public class Georges extends Client {
         return logger;
     }
 
+    public class MsgCmd {
+        @EventHandler
+        public void onMessage(ChannelMessageEvent e) {
+            if(!e.getMessage().startsWith("!")) {
+                return;
+            }
+            String[] parts = e.getMessage().substring(1).split("\\w+");
+            if(parts.length == 0) {
+                return;
+            }
+            Context context = new Context(e.getChannel(), e.getUser());
+            String message = messageManager.getTransformedMessage(parts[0], context);
+            if(message != null) {
+                context.message(message);
+            }
+        }
+    }
 }
