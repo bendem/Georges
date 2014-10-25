@@ -82,4 +82,19 @@ public class StrUtils {
         return COMMA_SPLITTER.split(string);
     }
 
+    /**
+     * Replaces all occurences of a String by another in a StringBuilder.
+     *
+     * @param builder the builder to replace from
+     * @param search the String to replace
+     * @param replace the String to use instead
+     */
+    public static void replace(StringBuilder builder, String search, String replace) {
+        int index;
+        do {
+            index = builder.indexOf(search);
+            builder.replace(index, search.length(), replace);
+        } while (index >= 0);
+    }
+
 }

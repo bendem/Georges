@@ -1,8 +1,9 @@
 package be.bendem.bendembot.automatedmessages;
 
 import be.bendem.bendembot.Context;
-import org.apache.commons.lang3.StringUtils;
+import be.bendem.bendembot.utils.StrUtils;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -29,14 +30,17 @@ public class Message {
     }
 
     public String transform(Context context, Map<String, String> data) {
-        String text = this.text;
-        for(Map.Entry<String, String> entry : data.entrySet()) {
-            text = StringUtils.replace(text, '{' + entry.getKey() + '}', entry.getValue());
-        }
-        for(MessageData messageData : MessageData.values()) {
-            text = StringUtils.replace(text, '{' + messageData.name().toLowerCase() + '}', messageData.getData(context));
-        }
-        return text;
+        StringBuilder builder = new StringBuilder(text);
+
+        data.entrySet().stream()
+            .filter(entry -> text.contains('{' + entry.getKey() + '}'))
+            .forEach(entry -> StrUtils.replace(builder, '{' + entry.getKey() + '}', entry.getValue()));
+
+        Arrays.stream(MessageData.values())
+            .filter(d -> text.contains('{' + d.name().toLowerCase() + '}'))
+            .forEach(d -> StrUtils.replace(builder, '{' + d.name().toLowerCase() + '}', d.getData(context)));
+
+        return builder.toString();
     }
 
     public String getName() {
