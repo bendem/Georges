@@ -4,14 +4,9 @@ import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.chathandling.ChatManager;
 import be.bendem.bendembot.chathandling.QuestionChat;
 import be.bendem.bendembot.chathandling.TwitterChat;
-import be.bendem.bendembot.chathandling.ViReplaceChat;
 import be.bendem.bendembot.commands.BaseCommand;
 import be.bendem.bendembot.commands.bot.*;
-import be.bendem.bendembot.commands.fun.ChooseCommand;
-import be.bendem.bendembot.commands.fun.DanceCommand;
-import be.bendem.bendembot.commands.fun.DiceCommand;
-import be.bendem.bendembot.commands.fun.FlipCommand;
-import be.bendem.bendembot.commands.fun.QuoteCommand;
+import be.bendem.bendembot.commands.fun.*;
 import be.bendem.bendembot.commands.messages.DataCommand;
 import be.bendem.bendembot.commands.messages.MessageCommand;
 import be.bendem.bendembot.commands.utilities.*;
@@ -24,6 +19,8 @@ import fr.ribesg.alix.api.EventManager;
 import fr.ribesg.alix.api.Log;
 import fr.ribesg.alix.api.Server;
 import fr.ribesg.alix.api.bot.util.PasteUtil;
+import fr.ribesg.alix.api.event.ChannelMessageEvent;
+import fr.ribesg.alix.api.event.EventHandler;
 import fr.ribesg.alix.api.message.PrivMsgIrcPacket;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -36,8 +33,8 @@ import java.util.Set;
  */
 public class Georges extends Client {
 
-    private final Configuration   configuration;
-    private final UserManager     userManager;
+    private final Configuration  configuration;
+    private final UserManager    userManager;
     private final MessageManager messageManager;
     private long lastSpoke = Time.now();
     private long lastJoke  = 0;
@@ -112,6 +109,24 @@ public class Georges extends Client {
         // Message commands
         register(new DataCommand(messageManager));
         register(new MessageCommand(messageManager));
+
+        EventManager.register(new Object() {
+            @EventHandler
+            public void onMessage(ChannelMessageEvent e) {
+                if(!e.getMessage().startsWith("!")) {
+                    return;
+                }
+                String[] parts = e.getMessage().substring(1).split("\\w+");
+                if(parts.length == 0) {
+                    return;
+                }
+                Context context = new Context(e.getChannel(), e.getUser());
+                String message = messageManager.getTransformedMessage(parts[0], context);
+                if(message != null) {
+                    context.message(message);
+                }
+            }
+        });
     }
 
     private void register(BaseCommand command) {
