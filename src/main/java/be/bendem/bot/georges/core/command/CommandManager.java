@@ -45,7 +45,7 @@ public class CommandManager {
         command.onCommand(
                 source,
                 bot.getState().getChannelByName(channelName),
-                bot.getState().getServer(),
+                bot.getApi(),
                 Arrays.asList(args).subList(1, args.length));
     }
 
