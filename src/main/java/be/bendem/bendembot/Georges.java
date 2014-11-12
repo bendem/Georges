@@ -2,6 +2,7 @@ package be.bendem.bendembot;
 
 import be.bendem.bendembot.automatedmessages.MessageManager;
 import be.bendem.bendembot.chathandling.ChatManager;
+import be.bendem.bendembot.chathandling.MagnetChat;
 import be.bendem.bendembot.chathandling.QuestionChat;
 import be.bendem.bendembot.chathandling.TwitterChat;
 import be.bendem.bendembot.commands.BaseCommand;
@@ -77,6 +78,7 @@ public class Georges extends Client {
         ChatManager chatManager = new ChatManager();
         chatManager.register(new TwitterChat(twitterApiUtils));
         chatManager.register(new QuestionChat());
+        chatManager.register(new MagnetChat());
         //chatManager.register(new ViReplaceChat()); // TODO Finish that when Georges can remember previous message of someone
 
         createCommandManager("`", configuration.getAdmins())
@@ -164,14 +166,6 @@ public class Georges extends Client {
             killed = false;
         }
         System.exit(0);
-    }
-
-    public long getLastJoke() {
-        return lastJoke;
-    }
-
-    public void setLastJoke(long lastJoke) {
-        this.lastJoke = lastJoke;
     }
 
     public static void main(final String args[]) {
