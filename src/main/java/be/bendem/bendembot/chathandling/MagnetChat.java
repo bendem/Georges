@@ -6,7 +6,6 @@ import be.bendem.bendembot.utils.MultiMap;
 import fr.ribesg.alix.api.enums.Codes;
 
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -24,6 +23,9 @@ import java.util.stream.Collectors;
  *
  * Example:
  *     magnet:?xt=urn:btih:Y3JFJ5TGS4X2E3UKHJVF6IW7FTPHU2IE&tr=http://open.nyaatorrents.info:6544/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://tracker.openbittorrent.com:80/announce
+ *
+ * Possible Java lib:
+ *     https://github.com/frostwire/frostwire-jlibtorrent
  */
 public class MagnetChat implements ChatHandler {
 

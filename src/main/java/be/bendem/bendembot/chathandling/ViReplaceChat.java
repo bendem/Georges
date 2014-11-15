@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class ViReplaceChat implements ChatHandler {
 
-    private final Pattern VI_REPLACE_COMMAND = Pattern.compile("(?<type>s|g)/(?<regex>[^/]+)/(?<replace>[^/]+)/?");
+    private final Pattern VI_REPLACE_COMMAND = Pattern.compile("^s/(?<regex>[^/]+)/(?<replace>[^/]+)/(?<options>[gi])?");
 
     @Override
     public void onChat(Context context, String message, Matcher matcher) {
