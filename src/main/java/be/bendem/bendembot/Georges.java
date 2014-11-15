@@ -107,6 +107,7 @@ public class Georges extends Client {
         register(new DiceCommand());
         register(new FlipCommand());
         register(new QuoteCommand());
+        register(new RainbowCommand());
 
         // Message commands
         register(new DataCommand(messageManager));
