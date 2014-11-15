@@ -10,12 +10,18 @@ import java.util.List;
 public class RainbowCommand extends BaseCommand {
 
     private static final String[] COLORS = new String[] {
-        Codes.WHITE, Codes.BLACK, Codes.BLUE,
-        Codes.GREEN, Codes.RED, Codes.BROWN,
-        Codes.PURPLE, Codes.ORANGE, Codes.YELLOW,
-        Codes.LIGHT_GREEN, Codes.TEAL, Codes.LIGHT_CYAN,
-        Codes.LIGHT_BLUE, Codes.PINK, Codes.GRAY,
-        Codes.LIGHT_GRAY
+        Codes.TEAL,
+        Codes.LIGHT_CYAN,
+        Codes.BLUE,
+        Codes.LIGHT_BLUE,
+        Codes.GREEN,
+        Codes.LIGHT_GREEN,
+        Codes.YELLOW,
+        Codes.ORANGE,
+        Codes.RED,
+        Codes.BROWN,
+        Codes.PURPLE,
+        Codes.PINK,
     };
 
     public RainbowCommand() {
