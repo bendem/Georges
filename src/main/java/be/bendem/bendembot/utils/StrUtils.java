@@ -22,7 +22,7 @@ public class StrUtils {
      */
     public static String antiPing(String text) {
         StringBuilder builder = new StringBuilder();
-        for(String word : text.split(" ")) {
+        for(String word : text.split("\\s")) {
             builder
                 // if it's an url or if it already contains a color code
                 .append(isUrl(word) || word.contains(Character.toString((char) 0x03)) ? word : antiPingWord(word))
