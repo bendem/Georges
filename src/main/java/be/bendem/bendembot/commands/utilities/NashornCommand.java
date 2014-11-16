@@ -104,7 +104,7 @@ public class NashornCommand extends BaseCommand {
         // Build default mappings for primitives
         StringBuilder sb = new StringBuilder();
         for(String name : TYPE_MAPPINGS) {
-            sb.append("var ").append(name).append(" = Java.type('java.lang.").append(name).append(");");
+            sb.append("var ").append(name).append(" = Java.type('java.lang.").append(name).append("');");
         }
         sb.append("var Out = Java.type('be.bendem.bendembot.commands.utilities.NashornCommand.OutputHandler');");
 
