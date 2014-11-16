@@ -20,6 +20,9 @@ import javax.script.ScriptException;
  */
 public class NashornCommand extends BaseCommand {
 
+    private static final String[] TYPE_MAPPINGS = new String[] {
+        "String", "Integer", "Character", "Double", "Float", "Number"
+    };
     private static final Pattern SANITIZE;
     static {
         String[] blacklist = {
@@ -94,10 +97,20 @@ public class NashornCommand extends BaseCommand {
         }
     }
 
-    private ScriptEngine prepareNewEngine() {
+    private static ScriptEngine prepareNewEngine() {
+        // New engine
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+
+        // Build default mappings for primitives
+        StringBuilder sb = new StringBuilder();
+        for(String name : TYPE_MAPPINGS) {
+            sb.append("var ").append(name).append(" = Java.type('java.lang.").append(name).append(";");
+        }
+        sb.append("var Out = Java.type('be.bendem.bendembot.commands.utilities.NashornCommand.OutputHandler');");
+
+        // Eval default code
         try {
-            engine.eval("var Out = Java.type('be.bendem.bendembot.commands.utilities.NashornCommand.OutputHandler');");
+            engine.eval(sb.toString());
         } catch(ScriptException e) {
             Georges.getLogger().error("Error while evaluating nashorn prescript", e);
         }
