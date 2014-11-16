@@ -12,6 +12,7 @@ import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
+import org.scribe.utils.StreamUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,32 +51,13 @@ public class TwitterApiUtils {
     }
 
     private JsonElement get(String uri) {
-        final StringBuilder url = new StringBuilder(TWITTER_ENDPOINT).append(uri);
-
-        Georges.getLogger().info(url.toString());
-
-        OAuthRequest request = new OAuthRequest(Verb.GET, url.toString());
+        OAuthRequest request = new OAuthRequest(Verb.GET, TWITTER_ENDPOINT + uri);
         service.signRequest(token, request);
         Response response = request.send();
-        String answer = readAnswer(response);
-        if(answer == null) {
-            throw new RuntimeException("Api response body was null");
+        if(!response.isSuccessful()) {
+            throw new RuntimeException("Failed to reach twitter api");
         }
-        return new JsonParser().parse(answer);
-    }
-
-    private String readAnswer(Response response) {
-        StringBuilder builder = new StringBuilder();
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(response.getStream(), StandardCharsets.UTF_8))) {
-            String input;
-            while((input = reader.readLine()) != null) {
-                builder.append(input);
-            }
-        } catch(IOException e) {
-            Georges.getLogger().error("Error while reading ");
-            return null;
-        }
-        return builder.toString();
+        return new JsonParser().parse(StreamUtils.getStreamContents(response.getStream()));
     }
 
 }
