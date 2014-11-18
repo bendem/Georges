@@ -102,6 +102,7 @@ public class Georges extends Client {
         register(new UserCommand(this));
 
         // Fun commands
+        register(new BarrelCommand());
         register(new ChooseCommand());
         register(new DanceCommand());
         register(new DiceCommand());
