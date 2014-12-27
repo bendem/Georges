@@ -6,6 +6,7 @@ import fr.ribesg.alix.api.enums.Codes;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Random;
 
 public class RainbowCommand extends BaseCommand {
 
@@ -24,6 +25,8 @@ public class RainbowCommand extends BaseCommand {
         Codes.PINK,
     };
 
+    private final Random RANDOM = new Random();
+
     public RainbowCommand() {
         super("rainbow", new String[] {
             "Rainbow unicorn - Usage ## <text>"
@@ -37,7 +40,7 @@ public class RainbowCommand extends BaseCommand {
         }
 
         StringBuilder buffer = new StringBuilder(StringUtils.join(args, ' '));
-        int currentColor = 0;
+        int currentColor = RANDOM.nextInt(COLORS.length);
         for(int i = buffer.length() - 1; i >= 0; i--) {
             buffer.insert(i, COLORS[currentColor]);
             currentColor = (currentColor + 1) % COLORS.length;
